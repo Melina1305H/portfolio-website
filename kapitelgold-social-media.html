@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Kapitelgold Social-Media-Kampagne · Melina Hosseinli</title>
+  <meta name="description" content="Fiktive Social-Media-Kampagne für eine New-Adult-Lesung bei Kapitelgold in Mainz – ein KI-gestütztes Portfolio-Projekt von Melina Hosseinli." />
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="author" content="Melina Hosseinli">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#f8f4ef">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue: #7e98a8;
+      --soft-blue: #adc2cf;
+      --pink: #f1e0e2;
+      --latte: #d8c8b7;
+      --sage: #d5d8c7;
+      --bg: #f7f1ec;
+      --card: #fffaf7;
+      --text: #171717;
+      --muted: #6f6b63;
+      --border: rgba(23, 23, 23, 0.12);
+      --shadow: 0 24px 70px rgba(80, 72, 62, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 10% 5%, rgba(241, 224, 226, 0.9), transparent 28%),
+        radial-gradient(circle at 90% 10%, rgba(173, 194, 207, 0.7), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 6vw;
+      background: rgba(255, 250, 247, 0.84);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -0.03em;
+      font-size: 1.1rem;
+    }
+
+    .logo span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .main-nav a {
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .nav-pill {
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: var(--text);
+      color: white;
+    }
+
+    .project-hero {
+      padding: 100px 6vw 70px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 50px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      color: var(--blue);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.78rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Space Grotesk", sans-serif;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 6.4rem);
+      max-width: 980px;
+    }
+
+    .lead {
+      margin-top: 28px;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+    }
+
+    .project-facts {
+      display: grid;
+      gap: 14px;
+      padding: 28px;
+      border-radius: 34px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .project-facts div {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-facts div:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .project-facts span {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--blue);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.72rem;
+    }
+
+    .project-facts p {
+      font-weight: 700;
+    }
+
+    .project-media {
+      margin: 0 6vw 90px;
+    }
+
+    .media-card {
+      min-height: 430px;
+      display: flex;
+      align-items: flex-end;
+      padding: 46px;
+      border-radius: 42px;
+      color: white;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(241, 224, 226, 0.95), transparent 30%),
+        radial-gradient(circle at 78% 22%, rgba(216, 200, 183, 0.95), transparent 34%),
+        radial-gradient(circle at 50% 85%, rgba(173, 194, 207, 0.55), transparent 36%),
+        linear-gradient(135deg, #5a2f22, #d8c8b7 52%, #f1e0e2);
+      box-shadow: var(--shadow);
+    }
+
+    .media-card div {
+      max-width: 760px;
+    }
+
+    .media-card h2 {
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      margin-bottom: 16px;
+    }
+
+    .media-card p {
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 1.08rem;
+    }
+
+    .section {
+      padding: 90px 6vw;
+    }
+
+    .section-head {
+      max-width: 820px;
+      margin-bottom: 42px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
+    }
+
+    .section-head p {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .detail-card {
+      padding: 34px;
+      border-radius: 34px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 50px rgba(80, 72, 62, 0.09);
+    }
+
+    .detail-card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 14px;
+    }
+
+    .detail-card p {
+      color: var(--muted);
+    }
+
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+
+    .benefit {
+      min-height: 300px;
+      padding: 30px;
+      border-radius: 34px;
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 50px rgba(80, 72, 62, 0.09);
+    }
+
+    .benefit span {
+      display: inline-flex;
+      width: 48px;
+      height: 48px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: white;
+      font-weight: 900;
+      margin-bottom: 54px;
+    }
+
+    .benefit h3 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .benefit p {
+      color: var(--muted);
+    }
+
+    .pink {
+      background: var(--pink);
+    }
+
+    .orange {
+      background: var(--latte);
+    }
+
+    .yellow {
+      background: var(--sage);
+    }
+
+    .blue {
+      background: var(--soft-blue);
+    }
+
+    .timeline-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .timeline-list div {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 18px;
+      padding: 24px;
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 38px rgba(80, 72, 62, 0.08);
+    }
+
+    .timeline-list span {
+      width: 52px;
+      height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: var(--pink);
+      font-weight: 900;
+    }
+
+    .timeline-list h3 {
+      margin-bottom: 8px;
+    }
+
+    .timeline-list p {
+      color: var(--muted);
+    }
+
+    .reflection {
+      margin: 40px 6vw 90px;
+      padding: 54px;
+      border-radius: 42px;
+      background: var(--text);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .reflection h2 {
+      font-size: clamp(2.2rem, 5vw, 4.4rem);
+      margin-bottom: 20px;
+    }
+
+    .reflection p {
+      max-width: 900px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 1.08rem;
+    }
+
+    .note {
+      margin: 0 6vw 90px;
+      padding: 24px 30px;
+      border-radius: 28px;
+      background: rgba(241, 224, 226, 0.55);
+      border: 1px solid var(--border);
+    }
+
+    .note p {
+      color: var(--muted);
+    }
+
+    .final-cta {
+      margin: 80px 6vw;
+      padding: 70px 8vw;
+      border-radius: 46px;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(241, 224, 226, 0.95), transparent 32%),
+        linear-gradient(135deg, #4a2419, #8b3f34);
+      color: white;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .final-cta h2 {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 22px;
+      padding: 15px 23px;
+      border-radius: 999px;
+      background: white;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 34px 6vw;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    .footer a {
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1000px) {
+      .project-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .benefit-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .main-nav {
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .detail-grid,
+      .benefit-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-list div {
+        grid-template-columns: 1fr;
+      }
+
+      .media-card,
+      .reflection {
+        padding: 34px;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+    }
+.case-hero {
+  padding: 100px 6vw 70px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 50px;
+  align-items: end;
+}
+
+.case-label {
+color: #9d6c25;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  margin-bottom: 18px;
+}
+
+.case-hero h1 {
+  font-size: clamp(3rem, 7vw, 6.4rem);
+  max-width: 980px;
+line-height: .95;
+letter-spacing: -.05em;
+}
+
+.case-hero .lead {
+  margin-top: 28px;
+  max-width: 780px;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+}
+
+.case-section {
+  padding: 120px 6vw;
+}
+
+.case-image-full {
+  width: 100%;
+  display: block;
+  border-radius: 38px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.case-caption {
+  max-width: 860px;
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 1.08rem;
+}
+.case-split {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 34px;
+  align-items: center;
+}
+
+.case-image-card {
+  padding: 18px;
+  border-radius: 38px;
+  background: white;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.08),
+    0 8px 20px rgba(0,0,0,.04);
+}
+
+.case-image-card img {
+  width: 100%;
+  display: block;
+  border-radius: 26px;
+  transition: transform 0.3s ease;
+}
+.presentation-shot {
+  padding: 10px;
+  background: #fffaf7;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 22px 60px rgba(74, 36, 25, 0.14),
+    0 8px 18px rgba(74, 36, 25, 0.08);
+  transform: rotate(-1deg);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.case-image-card:nth-of-type(even) .presentation-shot,
+.mockup-frame .presentation-shot {
+  transform: rotate(1deg);
+}
+
+.presentation-shot:hover {
+  transform: rotate(0deg) translateY(-6px) scale(1.01);
+  box-shadow:
+    0 28px 72px rgba(74, 36, 25, 0.18),
+    0 10px 24px rgba(74, 36, 25, 0.1);
+}
+
+.case-image-card:hover img {
+  transform: scale(1.015);
+}
+
+.case-info-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.case-info-card {
+  padding: 24px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #fffaf7, #f7efe8);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 38px rgba(80, 72, 62, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.case-info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 50px rgba(80, 72, 62, 0.13);
+}
+
+.case-info-card span {
+  display: block;
+  margin-bottom: 8px;
+  color: #b8873f;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+}
+
+.case-info-card h3 {
+  margin-bottom: 8px;
+  font-size: 1.35rem;
+}
+
+.case-info-card p {
+  color: var(--muted);
+}
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  margin-top: 26px;
+}
+
+.platform-card {
+  padding: 30px;
+  border-radius: 32px;
+  background: linear-gradient(135deg, #fffaf7, #f1e0e2);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 38px rgba(80, 72, 62, 0.08);
+}
+
+.platform-card strong {
+  display: block;
+  margin-bottom: 12px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.5rem;
+}
+
+.platform-card p {
+  color: var(--muted);
+}
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 34px;
+}
+
+.strategy-card {
+  padding: 26px;
+  border-radius: 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 38px rgba(80, 72, 62, 0.08);
+}
+
+.strategy-card span {
+  display: inline-flex;
+  margin-bottom: 22px;
+  font-size: 1.8rem;
+}
+
+.strategy-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.35rem;
+}
+
+.strategy-card p {
+  color: var(--muted);
+}
+.editorial-note {
+  max-width: 860px;
+  margin: 28px auto 0;
+  padding: 28px;
+  border-radius: 28px;
+  background: rgba(241, 224, 226, 0.45);
+  border: 1px solid var(--border);
+}
+
+.editorial-note h3 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.editorial-note p {
+  color: var(--muted);
+}
+.mockup-showcase {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 34px;
+  align-items: center;
+}
+
+.mockup-text {
+  padding: 34px;
+  border-radius: 34px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 38px rgba(80, 72, 62, 0.08);
+}
+
+.mockup-text h2 {
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  margin-bottom: 18px;
+}
+
+.mockup-text p {
+  color: var(--muted);
+}
+
+.mockup-frame {
+  padding: 18px;
+  border-radius: 38px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.mockup-frame img {
+  width: 100%;
+  display: block;
+  border-radius: 28px;
+}
+.case-reflection {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 34px;
+  align-items: center;
+}
+
+.quote-card {
+  padding: 42px;
+  border-radius: 38px;
+  background: linear-gradient(135deg, #4a2419, #8b3f34);
+  color: white;
+  box-shadow: var(--shadow);
+}
+
+.quote-card h2 {
+  font-size: clamp(2.2rem, 5vw, 4.4rem);
+  margin-bottom: 22px;
+}
+
+.quote-card p {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+@media (max-width: 1000px) {
+  .case-reflection {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 1000px) {
+  .mockup-showcase {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 1000px) {
+  .strategy-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .strategy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .platform-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 1000px) {
+  .case-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1000px) {
+  .case-hero {
+    grid-template-columns: 1fr;
+  }
+}
+.zoomable-image {
+  cursor: zoom-in;
+}
+
+.presentation-shot {
+  padding: 10px;
+  background: #fffaf7;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 22px 60px rgba(74, 36, 25, 0.14),
+    0 8px 18px rgba(74, 36, 25, 0.08);
+  transform: rotate(-1deg);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.presentation-shot:hover {
+  transform: rotate(0deg) translateY(-6px) scale(1.01);
+  box-shadow:
+    0 28px 72px rgba(74, 36, 25, 0.18),
+    0 10px 24px rgba(74, 36, 25, 0.1);
+}
+img.zoomable-image.presentation-shot {
+  cursor: zoom-in;
+  padding: 10px;
+  background: #fffaf7;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 22px 60px rgba(74, 36, 25, 0.14),
+    0 8px 18px rgba(74, 36, 25, 0.08);
+  transform: rotate(-1deg);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+img.zoomable-image.presentation-shot:hover {
+  transform: rotate(0deg) translateY(-6px) scale(1.01) !important;
+  box-shadow:
+    0 28px 72px rgba(74, 36, 25, 0.18),
+    0 10px 24px rgba(74, 36, 25, 0.1);
+}
+
+.case-image-card:hover img.zoomable-image.presentation-shot {
+  transform: rotate(0deg) translateY(-6px) scale(1.01) !important;
+}
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  background: rgba(23, 23, 23, 0.9);
+}
+
+.image-lightbox.is-open {
+  display: flex;
+}
+
+.image-lightbox img {
+  max-width: 86vw;
+  max-height: 82vh;
+  border-radius: 24px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+  transform: scale(1);
+  transition: transform 0.25s ease;
+}
+.lb-header {
+  position: fixed;
+  top: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+  text-align: center;
+  color: white;
+}
+
+.lb-header span {
+  display: block;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+}
+
+.lb-header h2 {
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+}
+
+.lb-close,
+.lb-arrow,
+.lb-controls button {
+  border: 0;
+  cursor: pointer;
+  background: #fffaf7;
+  color: #171717;
+  box-shadow: var(--shadow);
+}
+
+.lb-close {
+  position: fixed;
+  top: 26px;
+  right: 26px;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.lb-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  font-size: 1.8rem;
+}
+
+.lb-left {
+  left: 28px;
+}
+
+.lb-right {
+  right: 28px;
+}
+
+.lb-controls {
+  position: fixed;
+  bottom: 28px;
+  display: flex;
+  gap: 12px;
+}
+
+.lb-controls button {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+.main-nav a.nav-active {
+  color: #7e98a8 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 3px !important;
+  text-underline-offset: 8px !important;
+}
+  </style>
+</head>
+
+<body id="top">
+
+ <header class="site-header">
+  <a class="logo" href="index.html">
+    Melina Hosseinli
+    <span>Redaktion · Content · KI</span>
+  </a>
+
+  <nav class="main-nav">
+    <a href="index.html">Start</a>
+    <a href="about.html">Über mich</a>
+    <a href="index.html#kompetenzen">Kompetenzen</a>
+    <a href="index.html#projekte" class="nav-active">Projekte</a>
+    <a class="nav-pill" href="index.html#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+  <main>
+
+   <section class="case-hero">
+  <div>
+    <p class="case-label">KI · Social Media · Kampagne</p>
+    <h1>Kapitelgold – Social-Media-Kampagne</h1>
+    <p class="lead">
+      Entwicklung einer Social-Media-Kampagne für eine fiktive New-Adult-Lesung – von der Zielgruppenanalyse über die Content-Strategie bis zur visuellen Umsetzung.
+    </p>
+  </div>
+
+  <div class="project-facts">
+    <div>
+      <span>Format</span>
+      <p>Marketing-Case-Study</p>
+    </div>
+
+    <div>
+      <span>Bereich</span>
+      <p>Social Media, KI, Kampagnenplanung</p>
+    </div>
+
+    <div>
+      <span>Tools</span>
+      <p>ChatGPT, Planable</p>
+    </div>
+
+    <div>
+      <span>Rolle</span>
+      <p>Konzept, Zielgruppe, Strategie, Umsetzung</p>
+    </div>
+  </div>
+</section>
+
+<section class="case-section">
+  <p class="case-label">01 · Kampagnenidee</p>
+  <img class="case-image-full zoomable-image presentation-shot" src="assets/kg-case-1.png" alt="Titelfolie der Kapitelgold Social-Media-Kampagne">
+
+  <p class="case-caption">
+    Die Kampagne macht die Lesung nicht nur als Termin sichtbar, sondern inszeniert sie als emotionales Community-Erlebnis für junge New-Adult- und Romance-Leser:innen.
+  </p>
+</section>
+<section class="case-section">
+  <div class="case-split">
+    <div class="case-image-card">
+      <img class="zoomable-image presentation-shot" src="assets/kg-case-2.png" alt="Kampagnenkurzprofil der Kapitelgold Social-Media-Kampagne">
+    </div>
+
+    <div class="case-info-grid">
+      <article class="case-info-card">
+        <span>Ziel</span>
+        <h3>Aufmerksamkeit und Vorfreude aufbauen</h3>
+        <p>
+          Die Kampagne soll die Lesung sichtbar machen, Interesse wecken und zur Vormerkung oder Reservierung motivieren.
+        </p>
+      </article>
+
+      <article class="case-info-card">
+        <span>Zielgruppe</span>
+        <h3>Junge New-Adult- und Romance-Leser:innen</h3>
+        <p>
+          Im Fokus stehen junge Erwachsene zwischen 18 und 30 Jahren aus Mainz und Umgebung, die emotionale Geschichten und bookish Content mögen.
+        </p>
+      </article>
+
+      <article class="case-info-card">
+        <span>Kernbotschaft</span>
+        <h3>Live im Buchladen erleben</h3>
+        <p>
+          Die Lesung wird nicht sachlich als Termin kommuniziert, sondern als gemeinsamer Abend rund um Geschichten, Nähe und Community.
+        </p>
+      </article>
+
+      <article class="case-info-card">
+        <span>Plattformen</span>
+        <h3>Instagram als Anker, TikTok als Ergänzung</h3>
+        <p>
+          Instagram bündelt Informationen und Aktivierung. TikTok ergänzt die Kampagne durch kurze, emotionale BookTok-Impulse.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+          </p>
+        </div>
+      </div>
+    </section>
+<section class="case-section">
+  <div class="case-split">
+    <div>
+      <p class="case-label">03 · Zielgruppe & Plattformfit</p>
+      <h2>Zwei Plattformen, zwei Aufgaben</h2>
+      <p class="case-caption">
+        Die Kampagne unterscheidet bewusst zwischen Instagram und TikTok. Instagram dient als strukturierter Kampagnenanker, während TikTok stärker für emotionale, kurze und entdeckbare Inhalte genutzt wird.
+      </p>
+
+      <div class="platform-grid">
+        <article class="platform-card">
+          <strong>Instagram</strong>
+          <p>
+            Für Reels, Karussells, Storys, Eventinfos und klare Handlungsaufforderungen wie Speichern, Teilen oder Reservieren.
+          </p>
+        </article>
+
+        <article class="platform-card">
+          <strong>TikTok</strong>
+          <p>
+            Für BookTok-nahe Inhalte, emotionale Hooks, kurze Videomomente und eine stärkere Discovery-Wirkung.
+          </p>
+        </article>
+      </div>
+    </div>
+
+    <div class="case-image-card">
+    <img class="zoomable-image presentation-shot" src="assets/kg-case-3.png" alt="Zielgruppen- und Plattformanalyse der Kapitelgold Kampagne">
+    </div>
+  </div>
+</section>
+<section class="case-section">
+  <p class="case-label">04 · Strategischer Ansatz</p>
+
+  <div class="case-image-card">
+   <img class="zoomable-image presentation-shot" src="assets/kg-case-4.png" alt="Strategischer Ansatz und Content-Säulen der Kapitelgold Kampagne">
+  </div>
+
+  <div class="strategy-grid">
+    <article class="strategy-card">
+      <span>❤️</span>
+      <h3>Atmosphäre</h3>
+      <p>
+        Die Kampagne übersetzt die Lesung in ein warmes, bookish Gefühl und macht den Abend emotional erlebbar.
+      </p>
+    </article>
+
+    <article class="strategy-card">
+      <span>📖</span>
+      <h3>Autorin & Buch</h3>
+      <p>
+        Inhalte rund um die fiktive Autorin und das Buch schaffen Vertrauen, Kontext und Neugier.
+      </p>
+    </article>
+
+    <article class="strategy-card">
+      <span>💬</span>
+      <h3>Community</h3>
+      <p>
+        Fragen, Story-Sticker und Bookish-Impulse laden die Zielgruppe zur Interaktion ein.
+      </p>
+    </article>
+
+    <article class="strategy-card">
+      <span>📍</span>
+      <h3>Eventinfos</h3>
+      <p>
+        Datum, Ort und Reservierung bleiben klar sichtbar, damit aus Interesse eine konkrete Handlung wird.
+      </p>
+    </article>
+  </div>
+</section>
+<section class="case-section">
+  <p class="case-label">05 · Redaktionsplan</p>
+
+  <div class="case-image-card">
+    <img class="zoomable-image presentation-shot" src="assets/kg-case-5.png" alt="Redaktionsplan der Kapitelgold Social-Media-Kampagne">
+  </div>
+
+  <div class="editorial-note">
+    <h3>Sieben Inhalte über zwei Wochen</h3>
+    <p>
+      Der Redaktionsplan führt die Zielgruppe Schritt für Schritt durch die Kampagne:
+      vom ersten Aufmerksamkeitspost über Community-Interaktion bis zum finalen Reminder kurz vor der Lesung.
+    </p>
+  </div>
+</section>
+<section class="case-section">
+  <div class="mockup-showcase">
+    <div class="mockup-text">
+      <p class="case-label">06 · Umsetzung</p>
+      <h2>Vom Konzept zum Feed</h2>
+      <p>
+        Die Kampagne wurde nicht nur strategisch geplant, sondern auch visuell ausgearbeitet.
+        Die Social-Media-Mockups zeigen, wie die Atmosphäre der Lesung in konkrete Posts und Story-Elemente übersetzt werden kann.
+      </p>
+    </div>
+
+    <div class="mockup-frame">
+      <img class="zoomable-image presentation-shot" src="assets/kg-case-6.png" alt="Social-Media-Mockups der Kapitelgold Kampagne">
+    </div>
+  </div>
+</section>
+   <section class="case-section">
+  <div class="case-reflection">
+    <div class="quote-card">
+      <p class="case-label">07 · Reflexion</p>
+      <h2>„Emotion erzeugt Interesse – Klarheit ermöglicht Handlung.“</h2>
+      <p>
+        Das Projekt hat mir gezeigt, wie wichtig die Verbindung aus Atmosphäre, Zielgruppenverständnis und klarer Information für eine Social-Media-Kampagne ist.
+      </p>
+    </div>
+
+    <div class="case-image-card">
+    <img class="zoomable-image presentation-shot" src="assets/kg-case-7.png" alt="Reflexion der Kapitelgold Social-Media-Kampagne">
+    </div>
+  </div>
+</section> 
+    <section class="final-cta">
+      <p class="eyebrow">Zurück zur Übersicht</p>
+      <h2>Weitere Projekte ansehen?</h2>
+      <a class="btn" href="index.html#projekte">Zur Projektübersicht</a>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Melina Hosseinli · Portfolio · 2026</p>
+    <a href="#top">Nach oben ↑</a>
+  </footer>
+<div class="image-lightbox" id="imageLightbox">
+<div class="lb-header">
+  <span id="lbCounter">Folie 1 von 7</span>
+  <h2 id="lbTitle">Kampagnenidee</h2>
+</div>
+
+  <button class="lb-close" id="lbClose">×</button>
+
+  <button class="lb-arrow lb-left" id="lbPrev">❮</button>
+
+  <img id="lbImage" src="" alt="Vergrößerte Projektansicht">
+
+  <button class="lb-arrow lb-right" id="lbNext">❯</button>
+
+  <div class="lb-controls">
+      <button id="zoomMinus">−</button>
+      <button id="zoomPlus">+</button>
+  </div>
+
+</div>
+<script>
+  const caseImages = [
+    "assets/kg-case-1.png",
+    "assets/kg-case-2.png",
+    "assets/kg-case-3.png",
+    "assets/kg-case-4.png",
+    "assets/kg-case-5.png",
+    "assets/kg-case-6.png",
+    "assets/kg-case-7.png"
+  ];
+
+  const zoomImages = document.querySelectorAll(".zoomable-image");
+  const lightbox = document.querySelector("#imageLightbox");
+  const lbImage = document.querySelector("#lbImage");
+  const lbClose = document.querySelector("#lbClose");
+  const lbPrev = document.querySelector("#lbPrev");
+  const lbNext = document.querySelector("#lbNext");
+  const zoomPlus = document.querySelector("#zoomPlus");
+  const zoomMinus = document.querySelector("#zoomMinus");
+
+const lbCounter = document.querySelector("#lbCounter");
+const lbTitle = document.querySelector("#lbTitle");
+
+const slideTitles = [
+  "Kampagnenidee",
+  "Kampagnenprofil",
+  "Zielgruppe & Plattformfit",
+  "Strategischer Ansatz",
+  "Redaktionsplan",
+  "Umsetzung",
+  "Reflexion"
+];
+  let currentImageIndex = 0;
+  let zoomLevel = 1;
+
+ function updateLightboxContent() {
+  lbImage.src = caseImages[currentImageIndex];
+  lbImage.style.transform = "scale(1)";
+  lbCounter.textContent = `Folie ${currentImageIndex + 1} von ${caseImages.length}`;
+  lbTitle.textContent = slideTitles[currentImageIndex];
+}
+
+function openLightbox(index) {
+  currentImageIndex = index;
+  zoomLevel = 1;
+  updateLightboxContent();
+  lightbox.classList.add("is-open");
+}
+
+  function closeLightbox() {
+    lightbox.classList.remove("is-open");
+  }
+
+  function showNextImage() {
+  currentImageIndex = (currentImageIndex + 1) % caseImages.length;
+  zoomLevel = 1;
+  updateLightboxContent();
+}
+
+function showPrevImage() {
+  currentImageIndex = (currentImageIndex - 1 + caseImages.length) % caseImages.length;
+  zoomLevel = 1;
+  updateLightboxContent();
+}
+
+  zoomImages.forEach((img, index) => {
+    img.addEventListener("click", () => {
+      openLightbox(index);
+    });
+  });
+
+  lbClose.addEventListener("click", closeLightbox);
+  lbNext.addEventListener("click", showNextImage);
+  lbPrev.addEventListener("click", showPrevImage);
+
+  zoomPlus.addEventListener("click", () => {
+    zoomLevel += 0.2;
+    lbImage.style.transform = `scale(${zoomLevel})`;
+  });
+
+  zoomMinus.addEventListener("click", () => {
+    zoomLevel = Math.max(0.6, zoomLevel - 0.2);
+    lbImage.style.transform = `scale(${zoomLevel})`;
+  });
+
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!lightbox.classList.contains("is-open")) return;
+
+    if (event.key === "Escape") closeLightbox();
+    if (event.key === "ArrowRight") showNextImage();
+    if (event.key === "ArrowLeft") showPrevImage();
+  });
+</script>
+</body>
+</html>

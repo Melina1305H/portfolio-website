@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Melina Hosseinli · Portfolio</title>
+  <meta name="description" content="Portfolio von Melina Hosseinli – Redaktion, Social Media, Fachjournalismus und KI-gestützte Content-Projekte." />
+
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="author" content="Melina Hosseinli">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#f8f4ef">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --celestial: #7e98a8;
+      --cool-blue: #adc2cf;
+      --pink-soft: #f1e0e2;
+      --latte: #d8c8b7;
+      --sage: #d5d8c7;
+      --gargoyle: #adb0a1;
+
+      --bg: #f7f1ec;
+      --bg-soft: #fffaf7;
+      --text: #171717;
+      --muted: #6f6b63;
+      --primary: #7e98a8;
+      --border: rgba(23, 23, 23, 0.12);
+      --shadow: 0 24px 70px rgba(80, 72, 62, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 10% 5%, rgba(241, 224, 226, 0.9), transparent 28%),
+        radial-gradient(circle at 90% 10%, rgba(173, 194, 207, 0.7), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 6vw;
+      background: rgba(255, 250, 247, 0.82);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -0.03em;
+      font-size: 1.1rem;
+    }
+
+    .logo span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .main-nav a {
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+.main-nav a.nav-active {
+  color: var(--primary);
+  position: relative;
+}
+.main-nav a.nav-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 100%;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 999px;
+}
+.main-nav a.nav-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 100%;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 999px;
+}
+.main-nav a.nav-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 100%;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 999px;
+}
+    .nav-pill {
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: var(--text);
+      color: white !important;
+    }
+
+    .menu-btn {
+      display: none;
+      border: 0;
+      background: var(--text);
+      color: white;
+      border-radius: 999px;
+      padding: 10px 13px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: center;
+      padding: 90px 6vw 70px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      color: var(--primary);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.78rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Space Grotesk", sans-serif;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 7vw, 6.4rem);
+      max-width: 980px;
+    }
+
+    .lead {
+      margin-top: 28px;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 23px;
+      border-radius: 999px;
+      background: var(--text);
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+      border: 1px solid var(--text);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(23, 23, 23, 0.18);
+    }
+
+    .btn-light {
+      background: var(--bg-soft);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .hero-visual {
+  position: relative;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-photo {
+  position: relative;
+  width: min(430px, 90%);
+}
+
+.hero-photo img {
+  width: 100%;
+  display: block;
+  border-radius: 42px;
+  box-shadow: var(--shadow);
+  object-fit: cover;
+}
+
+.hero-tag {
+  position: absolute;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(255, 250, 247, 0.88);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 34px rgba(80, 72, 62, 0.14);
+  font-weight: 900;
+  backdrop-filter: blur(12px);
+}
+
+.tag-one {
+  top: 28px;
+  left: -34px;
+}
+
+.tag-two {
+  top: 150px;
+  right: -54px;
+}
+
+.tag-three {
+  bottom: 120px;
+  left: -56px;
+}
+
+.tag-four {
+  bottom: 36px;
+  right: -28px;
+}
+
+    .section {
+      padding: 90px 6vw;
+    }
+
+    .section-head {
+      max-width: 820px;
+      margin-bottom: 42px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
+    }
+
+    .section-head p {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .intro-card {
+      max-width: 1000px;
+      padding: 42px;
+      border-radius: 38px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .intro-card p {
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .intro-card p + p {
+      margin-top: 18px;
+    }
+
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+
+    .benefit {
+      min-height: 310px;
+      padding: 30px;
+      border-radius: 34px;
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 50px rgba(80, 72, 62, 0.09);
+    }
+
+    .benefit span {
+      display: inline-flex;
+      width: 48px;
+      height: 48px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: white;
+      font-weight: 900;
+      margin-bottom: 54px;
+    }
+
+    .benefit h3 {
+      font-size: 1.45rem;
+      margin-bottom: 14px;
+    }
+
+    .benefit p {
+      color: var(--muted);
+    }
+
+    .pink {
+      background: var(--pink-soft);
+    }
+
+    .orange {
+      background: var(--latte);
+    }
+
+    .yellow {
+      background: var(--sage);
+    }
+
+    .blue {
+      background: var(--cool-blue);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+    .project-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 520px;
+  border-radius: 36px;
+  background: var(--bg-soft);
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 50px rgba(80, 72, 62, 0.09);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+   .project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 80px rgba(80, 72, 62, 0.18);
+}
+
+    .project-img {
+      min-height: 230px;
+      padding: 26px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .project-img span {
+      display: inline-flex;
+      padding: 10px 15px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      font-weight: 900;
+    }
+.project-preview {
+  position: relative;
+  overflow: hidden;
+  height: 250px;
+  min-height: 250px;
+  padding: 0;
+  display: block;
+}
+
+.project-preview img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.project-puma img {
+  object-position: center top;
+}
+
+.project-fenty-puma img {
+  object-position: center 14%;
+}
+
+.project-journalistin img {
+  object-position: center 27%;
+}
+
+.project-echoes img {
+  object-position: center top;
+}
+
+.project-card:hover .project-preview img {
+  transform: scale(1.08);
+  filter: brightness(1.03);
+}
+
+.project-preview span {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  z-index: 2;
+  padding: 11px 16px;
+  border-radius: 999px;
+  background: rgba(255, 250, 247, 0.9);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 28px rgba(80, 72, 62, 0.16);
+  backdrop-filter: blur(10px);
+  font-weight: 900;
+}
+    .project-body {
+      padding: 28px;
+    }
+
+    .category {
+      color: var(--primary);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      margin-bottom: 14px;
+    }
+
+    .project-body h3 {
+  font-size: 1.9rem;
+  line-height: 1.2;
+  margin: 12px 0;
+  font-weight: 800;
+}
+
+    .project-body p {
+      color: var(--muted);
+    }
+
+    .project-more {
+      display: inline-block;
+      margin-top: 22px;
+      font-weight: 900;
+    }
+
+    .project-redaktion {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(241, 224, 226, 0.95), transparent 30%),
+        radial-gradient(circle at 78% 24%, rgba(173, 194, 207, 0.85), transparent 34%),
+        radial-gradient(circle at 50% 88%, rgba(216, 200, 183, 0.88), transparent 36%),
+        linear-gradient(135deg, #b95d73, #f1e0e2 48%, #7e98a8);
+    }
+
+    .project-kapitelgold {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(241, 224, 226, 0.95), transparent 30%),
+        radial-gradient(circle at 78% 22%, rgba(216, 200, 183, 0.95), transparent 34%),
+        radial-gradient(circle at 50% 85%, rgba(173, 194, 207, 0.55), transparent 36%),
+        linear-gradient(135deg, #5a2f22, #d8c8b7 52%, #f1e0e2);
+    }
+
+    .project-kapitelgold-website {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(241, 224, 226, 0.95), transparent 30%),
+        radial-gradient(circle at 78% 24%, rgba(216, 200, 183, 0.95), transparent 34%),
+        radial-gradient(circle at 50% 88%, rgba(213, 216, 199, 0.78), transparent 36%),
+        linear-gradient(135deg, #6A3E2F, #D6A54A 52%, #FAF4EC);
+    }
+
+    .project-puma {
+      background:
+        radial-gradient(circle at 20% 20%, rgba(241, 224, 226, 0.95), transparent 32%),
+        radial-gradient(circle at 80% 25%, rgba(126, 152, 168, 0.9), transparent 34%),
+        linear-gradient(135deg, #171717, #7e98a8 55%, #d8c8b7);
+    }
+
+    .project-fenty-puma {
+      background:
+        radial-gradient(circle at 18% 20%, rgba(241, 224, 226, 0.95), transparent 30%),
+        radial-gradient(circle at 82% 25%, rgba(173, 194, 207, 0.92), transparent 34%),
+        radial-gradient(circle at 50% 85%, rgba(216, 200, 183, 0.95), transparent 36%),
+        linear-gradient(135deg, #171717, #7e98a8 52%, #d5d8c7);
+    }
+
+    .project-journalist {
+      background:
+        radial-gradient(circle at 18% 20%, rgba(241, 224, 226, 0.95), transparent 30%),
+        radial-gradient(circle at 78% 25%, rgba(173, 194, 207, 0.85), transparent 34%),
+        radial-gradient(circle at 52% 80%, rgba(216, 200, 183, 0.88), transparent 36%),
+        linear-gradient(135deg, #adb0a1, #7e98a8 48%, #d8c8b7);
+    }
+
+    .project-echoes {
+      background:
+        radial-gradient(circle at 18% 20%, rgba(241, 224, 226, 0.95), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(126, 152, 168, 0.9), transparent 34%),
+        radial-gradient(circle at 45% 85%, rgba(216, 200, 183, 0.9), transparent 38%),
+        linear-gradient(135deg, #171717, #7e98a8 48%, #adb0a1);
+    }
+
+    .project-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .project-detail-card {
+      padding: 34px;
+      border-radius: 34px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 50px rgba(80, 72, 62, 0.09);
+    }
+
+    .project-detail-card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 14px;
+    }
+
+    .project-detail-card p {
+      color: var(--muted);
+    }
+
+   .timeline-list {
+  display: grid;
+  gap: 26px;
+  margin-top: 46px;
+}
+
+.timeline-list > div {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 26px;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.timeline-list span {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 18px 45px rgba(80, 72, 62, 0.12);
+  font-size: 1.4rem;
+}
+
+.timeline-list h3 {
+  margin-bottom: 8px;
+  font-size: 1.25rem;
+}
+
+.timeline-list p {
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 900px;
+}
+
+@media (max-width: 760px) {
+  .timeline-list > div {
+    grid-template-columns: 1fr;
+  }
+}
+    .final-cta {
+      margin: 80px 6vw;
+      padding: 70px 8vw;
+      border-radius: 46px;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(241, 224, 226, 0.95), transparent 32%),
+        linear-gradient(135deg, var(--text), var(--primary));
+      color: white;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .final-cta h2 {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      margin-bottom: 20px;
+    }
+
+    .final-cta p {
+      max-width: 680px;
+      margin: 0 auto 26px;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .final-cta .eyebrow {
+      color: var(--pink-soft);
+    }
+
+ .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 28px;
+  padding: 38px 6vw;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+.footer strong {
+  display: block;
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.footer a {
+  text-decoration: none;
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+    @media (max-width: 1050px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 420px;
+      }
+
+      .benefit-grid,
+      .project-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .site-header {
+        align-items: flex-start;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .main-nav {
+        display: none;
+        position: absolute;
+        left: 6vw;
+        right: 6vw;
+        top: 82px;
+        padding: 22px;
+        border-radius: 24px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .main-nav.is-open {
+        display: flex;
+      }
+
+      .hero {
+        padding-top: 70px;
+      }
+
+      .hero-visual {
+        min-height: 360px;
+      }
+
+      .hero-card {
+        inset: 20px auto auto 0;
+        width: 100%;
+      }
+
+      .hero-sticker {
+        width: 86px;
+        height: 86px;
+        font-size: 0.9rem;
+      }
+
+      .benefit-grid,
+      .project-grid,
+      .project-detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card {
+        min-height: auto;
+      }
+
+      .timeline-list div {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+    }
+.about-teaser {
+  padding: 90px 6vw;
+}
+
+.about-teaser-card {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 46px;
+  border-radius: 38px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 34px;
+}
+
+.about-teaser-card h2 {
+  margin: 12px 0 18px;
+  max-width: 760px;
+}
+
+.about-teaser-card p {
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+@media (max-width: 800px) {
+  .about-teaser-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+  </style>
+</head>
+
+<body id="top">
+
+  <header class="site-header">
+  <a class="logo" href="#top">
+  Melina Hosseinli
+  <span>Redaktion · Content · KI</span>
+</a>
+
+    <button class="menu-btn" aria-label="Menü öffnen">☰</button>
+
+    <nav class="main-nav">
+  <a href="#top" data-section="top" class="nav-active">Start</a>
+  <a href="about.html">Über mich</a>
+  <a href="#kompetenzen" data-section="kompetenzen">Kompetenzen</a>
+  <a href="#projekte" data-section="projekte">Projekte</a>
+  <a class="nav-pill" href="#kontakt" data-section="kontakt">Kontakt</a>
+</nav>
+  </header>
+
+  <main>
+
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Redaktion · Social Media · KI-Content</p>
+
+        <h1>
+  Inhalte mit redaktionellem Blick und kreativer Wirkung.
+</h1>
+
+        <p class="lead">
+          Mein Portfolio verbindet redaktionelle Erfahrung aus dem Fachverlag mit modernen Content-Projekten:
+          von Interviews, Fachtexten und Newslettern über Social-Media-Kampagnen bis zu KI-gestützten Videos,
+          Bildwelten, Musik- und Website-Konzepten.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn" href="#projekte">Projekte ansehen</a>
+          <a class="btn btn-light" href="#kontakt">Kontakt aufnehmen</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+      <div class="hero-photo">
+
+  <img src="assets/melina.jpg" alt="Melina Hosseinli">
+
+  <div class="hero-tag tag-one">📰 Redaktion</div>
+
+  <div class="hero-tag tag-two">📱 Social Media</div>
+
+  <div class="hero-tag tag-three">🤖 KI & Content</div>
+
+  <div class="hero-tag tag-four">✍️ Storytelling</div>
+
+</div>
+    </section>
+
+    <section id="ueber-mich" class="about-teaser">
+  <div class="about-teaser-card">
+    <div>
+      <p class="eyebrow">Über mich</p>
+
+      <h2>Redaktioneller Blick trifft kreative Mediengestaltung.</h2>
+
+      <p>
+        Ich habe Medienwissenschaft studiert und verbinde redaktionelle Erfahrung
+        mit Content Creation, Social Media und KI-gestützten Medienprojekten.
+      </p>
+    </div>
+
+    <a class="btn" href="about.html">Zur Über-mich-Seite →</a>
+  </div>
+</section>
+    </section>
+
+    <section class="section" id="kompetenzen">
+      <div class="section-head">
+        <p class="eyebrow">Kompetenzen</p>
+        <h2>Was ich einbringe</h2>
+        <p>
+          Meine Arbeit verbindet Sprache, Struktur, Zielgruppenverständnis und kreative Medienformate.
+        </p>
+      </div>
+
+      <div class="benefit-grid">
+        <article class="benefit pink">
+          <span>01</span>
+          <h3>Redaktion & Text</h3>
+          <p>
+            Recherche, Fachtexte, Interviews und verständliche Aufbereitung komplexer Themen.
+          </p>
+        </article>
+
+        <article class="benefit orange">
+          <span>02</span>
+          <h3>Social Media & Kampagnen</h3>
+          <p>
+            Content-Ideen, Redaktionspläne, Zielgruppenansprache und Kampagnenentwicklung.
+          </p>
+        </article>
+
+        <article class="benefit yellow">
+          <span>03</span>
+          <h3>KI-gestützte Medienproduktion</h3>
+          <p>
+           KI-Bildwelten, Videos, Website-Konzepte und kreative Workflows.
+          </p>
+        </article>
+
+        <article class="benefit blue">
+          <span>04</span>
+          <h3>Web & visuelle Konzepte</h3>
+          <p>
+            Website-Struktur, Markenwelten, Projektseiten und Nutzerführung.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="projekte">
+      <div class="section-head">
+        <p class="eyebrow">Projekte</p>
+        <h2>Ausgewählte Arbeiten</h2>
+        <p>
+          Projekte aus Redaktion, Content Creation, KI und digitalen Medienkonzepten.
+        </p>
+      </div>
+
+      <div class="project-grid">
+
+        <a class="project-card reveal-on-scroll" href="redaktionelle-arbeitsproben.html">
+        <div class="project-img project-preview project-redaktion">
+    <img src="assets/redaktion-hero.png" alt="Redaktionelle Arbeitsproben">
+    <span>Redaktion</span>
+</div>
+          <div class="project-body">
+            <p class="category">Redaktion · Fachjournalismus · Content Creation</p>
+            <h3>Redaktionelle Arbeitsproben</h3>
+            <p>
+              Arbeitsproben aus dem Fachverlag — mit Recherche, Fachtexten, Interviews, Online-Meldungen, Newslettern und Magazinplanung.
+            </p>
+            <span class="project-more">Projekt ansehen →</span>
+          </div>
+        </a>
+
+        <a class="project-card reveal-on-scroll" href="kapitelgold-social-media.html">
+          <div class="project-img project-preview project-kapitelgold">
+  <img src="assets/kapitelgold-social-preview.png" alt="Kapitelgold Social-Media-Kampagne Vorschau">
+  <span>Kapitelgold</span>
+</div>
+          <div class="project-body">
+            <p class="category">KI · Social Media · Kampagne</p>
+            <h3>Kapitelgold Social-Media-Kampagne</h3>
+            <p>
+              Fiktives Social-Media-Konzept für eine New-Adult-Lesung in Mainz, mit Zielgruppe, Content-Säulen und Redaktionsplan.
+            </p>
+            <span class="project-more">Projekt ansehen →</span>
+          </div>
+        </a>
+
+                <a class="project-card reveal-on-scroll" href="kapitelgold-website.html">
+          <div class="project-img project-preview project-kapitelgold-website">
+  <img src="assets/kg-website-hero.png" alt="Kapitelgold Website Vorschau">
+  <span>Website-Konzept</span>
+</div>
+          <div class="project-body">
+            <p class="category">KI · Website · Branding</p>
+            <h3>Kapitelgold Website-Konzept</h3>
+            <p>
+              KI-gestützte Website für einen fiktiven Buchladen in Mainz, mit Markenwelt, SEO-Struktur, Goldi und Eventbereich.
+            </p>
+            <span class="project-more">Projekt ansehen →</span>
+          </div>
+        </a>
+
+               <a class="project-card reveal-on-scroll" href="puma-imagefilm.html">
+          <div class="project-img project-preview project-puma">
+  <img src="assets/puma-imagefilm-preview.png" alt="PUMA Imagefilm Vorschau">
+  <span>PUMA Imagefilm</span>
+</div>
+          <div class="project-body">
+            <p class="category">KI · Imagefilm · Video</p>
+            <h3>PUMA Imagefilm</h3>
+            <p>
+              Fiktiver KI-Imagefilm im 16:9-Format — von der Konzeptidee über Bild- und Videogenerierung bis zum finalen Schnitt.
+            </p>
+            <span class="project-more">Projekt ansehen →</span>
+          </div>
+        </a>
+
+                <a class="project-card reveal-on-scroll" href="rihanna-fenty-puma.html">
+       <div class="project-img project-preview project-fenty-puma">
+  <img src="assets/fenty-puma-preview.png" alt="Rihanna Fenty x PUMA Produktvideo Vorschau">
+  <span>Fenty x PUMA</span>
+</div>
+          <div class="project-body">
+            <p class="category">KI · Produktvideo · Social Media</p>
+            <h3>Rihanna Fenty x PUMA Produktvideo</h3>
+            <p>
+              Fiktives KI-Produktvideo im 9:16-Format — entwickelt für eine moderne Social-Media-Inszenierung.
+            </p>
+            <span class="project-more">Projekt ansehen →</span>
+          </div>
+        </a>
+
+                <a class="project-card reveal-on-scroll" href="visuelle-welt-journalistin.html">
+          <div class="project-img project-preview project-journalistin">
+  <img src="assets/journalistin-preview.png" alt="Visuelle Welt einer Journalistin">
+  <span>Visual Storytelling</span>
+</div>
+          <div class="project-body">
+            <p class="category">KI · Bildserie · Storytelling</p>
+            <h3>Visuelle Welt einer Journalistin</h3>
+            <p>
+              KI-gestützte Bildserie über eine Journalistin im Laufe ihrer Jahre — mit rotem Faden und visueller Weiterentwicklung.
+            </p>
+            <span class="project-more">Projekt ansehen →</span>
+          </div>
+        </a>
+
+                <a class="project-card reveal-on-scroll" href="echoes-and-goodbyes.html">
+          <div class="project-img project-preview project-echoes">
+  <img src="assets/echoes-goodbyes-preview.png" alt="Echoes and Goodbyes">
+  <span>Echoes and Goodbyes</span>
+</div>
+          <div class="project-body">
+            <p class="category">KI · Musik · Songwriting</p>
+            <h3>Echoes and Goodbyes</h3>
+            <p>
+              KI-gestütztes Musikprojekt mit Konzept, Songtext-Bearbeitung und mehreren Versionen eines fertigen Musikstücks.
+            </p>
+            <span class="project-more">Projekt ansehen →</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Arbeitsweise</p>
+        <h2>Strukturiert, kreativ und zielgruppenorientiert</h2>
+      </div>
+
+      <div class="timeline-list">
+        <div>
+          <span>🔍</span>
+          <div>
+            <h3>Verstehen</h3>
+            <p>
+             Ich analysiere Zielgruppe, Kontext und Botschaft, bevor Inhalte entwickelt werden.
+            </p>
+          </div>
+        </div>
+
+        <div>
+         <span>🧩</span>
+          <div>
+            <h3>Strukturieren</h3>
+            <p>
+              Aus Ideen entstehen klare Konzepte, Redaktionspläne und nachvollziehbare Projektstrukturen.
+            </p>
+          </div>
+        </div>
+
+        <div>
+         <span>🎨</span>
+          <div>
+            <h3>Gestalten</h3>
+            <p>
+              Texte, Bilder und digitale Inhalte werden verständlich, visuell stimmig und zielgerichtet umgesetzt.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <span>✨</span>
+          <div>
+            <h3>Verfeinern</h3>
+            <p>
+              Zum Schluss werden Inhalte auf Klarheit, Wirkung und Nutzerführung optimiert.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" id="kontakt">
+      <p class="eyebrow">Kontakt</p>
+      <h2>Lust auf Austausch?</h2>
+      <p>
+        Ich freue mich über Kontakte, Projekte und Möglichkeiten im Bereich Redaktion, Social Media und digitale Kommunikation.
+      </p>
+      <a class="btn btn-light" href="mailto:melhoss@yahoo.com">E-Mail schreiben</a>
+    </section>
+
+  </main>
+
+ <footer class="footer">
+  <div>
+    <strong>Melina Hosseinli</strong>
+    <p>Redaktion · Content Creation · KI & digitale Medien</p>
+  </div>
+
+  <div class="footer-links">
+    <a href="mailto:melhoss@yahoo.com">E-Mail</a>
+    <a href="#top">Nach oben ↑</a>
+  </div>
+</footer>
+
+  <script>
+    const menuButton = document.querySelector(".menu-btn");
+    const mainNav = document.querySelector(".main-nav");
+
+    if (menuButton && mainNav) {
+      menuButton.addEventListener("click", () => {
+        mainNav.classList.toggle("is-open");
+      });
+    }
+  </script>
+<script>
+  const revealElements = document.querySelectorAll(".reveal-on-scroll");
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+      }
+    });
+  }, {
+    threshold: 0.15
+  });
+
+  revealElements.forEach((element) => {
+    revealObserver.observe(element);
+  });
+</script>
+<script>
+  const navLinks = document.querySelectorAll(".main-nav a:not(.nav-pill)");
+
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      navLinks.forEach((item) => {
+        item.classList.remove("nav-active");
+      });
+
+      link.classList.add("nav-active");
+    });
+  });
+</script>
+<script>
+  const navStart = document.querySelector('.main-nav a[data-section="top"]');
+  const navKompetenzen = document.querySelector('.main-nav a[data-section="kompetenzen"]');
+  const navProjekte = document.querySelector('.main-nav a[data-section="projekte"]');
+  const navKontakt = document.querySelector('.main-nav a[data-section="kontakt"]');
+
+  const kompetenzenSection = document.getElementById("kompetenzen");
+  const projekteSection = document.getElementById("projekte");
+  const kontaktSection = document.getElementById("kontakt");
+
+  function updateActiveNav() {
+    const scrollY = window.scrollY + 220;
+
+    navStart.classList.remove("nav-active");
+    navKompetenzen.classList.remove("nav-active");
+    navProjekte.classList.remove("nav-active");
+    navKontakt.classList.remove("nav-active");
+
+    if (kontaktSection && scrollY >= kontaktSection.offsetTop) {
+      navKontakt.classList.add("nav-active");
+    } else if (projekteSection && scrollY >= projekteSection.offsetTop) {
+      navProjekte.classList.add("nav-active");
+    } else if (kompetenzenSection && scrollY >= kompetenzenSection.offsetTop) {
+      navKompetenzen.classList.add("nav-active");
+    } else {
+      navStart.classList.add("nav-active");
+    }
+  }
+
+  window.addEventListener("scroll", updateActiveNav);
+  window.addEventListener("load", updateActiveNav);
+</script>
+</script>
+</body>
+</html>
