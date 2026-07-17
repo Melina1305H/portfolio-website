@@ -1,0 +1,2207 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goldi und das Goldene Kapitel</title>
+  <!-- Google Font für einen authentischen Retro-Pixel-Look -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* Grundlegendes Styling für gemütliche Atmosphäre */
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0b0604;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: 'Press Start 2P', monospace;
+      color: #f7e1cb;
+    }
+
+    #game-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+      max-width: 1024px;
+      padding: 10px;
+    }
+
+    /* Das Canvas behält ein festes Seitenverhältnis und skaliert perfekt */
+    #canvas-container {
+      position: relative;
+      width: 1024px;
+      height: 768px;
+      max-width: 100%;
+      aspect-ratio: 1024 / 768;
+      border: 6px solid #4e2b1f;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 
+                  0 0 40px rgba(230, 124, 0, 0.2);
+      background-color: #0f0805;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+    }
+
+    /* Cozy-UI Layer über dem Canvas */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(12, 6, 4, 0.92);
+      backdrop-filter: blur(5px);
+      z-index: 10;
+      transition: opacity 0.3s ease;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .hidden {
+      display: none !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #ffd54f;
+      text-shadow: 3px 3px 0px #5c3020, 0 0 25px rgba(255, 179, 0, 0.4);
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    h2 {
+      font-size: 16px;
+      color: #ffd54f;
+      text-shadow: 2px 2px 0px #3e2723;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 9px;
+      line-height: 1.8;
+      color: #e0cfc3;
+      max-width: 650px;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #795548 0%, #3e2723 100%);
+      border: 4px solid #ffd54f;
+      border-radius: 8px;
+      color: #fff8e1;
+      padding: 15px 30px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      box-shadow: 0 6px 0px #27140f, 0 10px 20px rgba(0,0,0,0.5);
+      transition: all 0.1s ease;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0px #27140f, 0 12px 24px rgba(0,0,0,0.6);
+      background: linear-gradient(135deg, #8d6e63 0%, #4e342e 100%);
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0px #27140f, 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    /* Geteilter Codex Container */
+    .codex-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      max-width: 950px;
+      margin: 10px 0 20px 0;
+    }
+
+    .codex-column {
+      background: rgba(22, 11, 6, 0.7);
+      border: 3px solid #5c3020;
+      border-radius: 8px;
+      padding: 15px;
+      overflow-y: auto;
+      max-height: 420px;
+    }
+
+    .codex-column.hazards {
+      border-color: #ef5350;
+    }
+
+    .codex-column h2 {
+      font-size: 11px;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .codex-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .codex-item {
+      background: rgba(10, 5, 3, 0.8);
+      border: 2px solid #795548;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .codex-column.hazards .codex-item {
+      border-color: #e53935;
+    }
+
+    .codex-item canvas {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .codex-item-info h3 {
+      font-size: 8px;
+      color: #ffd54f;
+      margin: 0 0 4px 0;
+    }
+
+    .codex-item-info p {
+      font-size: 7px;
+      line-height: 1.4;
+      color: #fff8e1;
+      margin: 0;
+    }
+
+    /* Mobile Schwebe-Taste */
+    #mobile-jump-btn {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: rgba(92, 48, 32, 0.85);
+      border: 4px solid #ffd54f;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 10px;
+      z-index: 5;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    /* Mute Button oben rechts */
+    #mute-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(43, 22, 15, 0.8);
+      border: 3px solid #ffd54f;
+      color: #fff8e1;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 8px;
+      cursor: pointer;
+      z-index: 12;
+    }
+
+    /* Mobile Erkennung */
+    @media (pointer: coarse) {
+      #mobile-jump-btn {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="game-wrapper">
+  <div id="canvas-container">
+    
+    <!-- Mute Button -->
+    <button id="mute-btn">🎵 Musik: An</button>
+
+    <!-- Start-Bildschirm -->
+    <div id="start-screen" class="overlay">
+      <h1 style="color: #ffd54f;">Goldi & das Goldene Kapitel</h1>
+      <p>
+        Hilf Goldi, dem niedlichen weißen Buchgeist, die verlorenen Seiten einzusammeln und die gemütliche, kerzenbeleuchtete Bibliothek zu retten!
+      </p>
+      
+      <div class="controls-info">
+        <strong style="color: #ffd54f; font-size: 10px;">📖 STEUERUNG:</strong>
+        <ul>
+          <li><strong>Bewegung:</strong> Bewege die Maus (oder deinen Finger auf dem Bildschirm), um Goldi frei schweben zu lassen.</li>
+          <li><strong>Aufwärtsschweben (Rechtsklick / Tippen):</strong> Lässt Goldi nach oben flattern, um Gefahren elegant auszuweichen.</li>
+        </ul>
+      </div>
+
+      <button id="to-danger-btn" class="btn">Bibliotheks-Codex öffnen</button>
+    </div>
+
+    <!-- Neuer Kombi-Codex Bildschirm (Einsammelbares & Gefahren) -->
+    <div id="danger-screen" class="overlay hidden">
+      <h2>📖 Archiv-Codex der Bibliothek 📖</h2>
+      <p>Lerne die Schätze und die lauernden Gefahren kennen, bevor du das Abenteuer startest!</p>
+      
+      <div class="codex-container">
+        
+        <!-- Linke Spalte: Schätze -->
+        <div class="codex-column">
+          <h2 style="color: #a5d6a7;">✨ KOSTBARKEITEN (Sammeln)</h2>
+          <div class="codex-list">
+            <div class="codex-item">
+              <canvas id="page-codex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Bücherseite</h3>
+                <p>Gibt +10 Punkte und bringt dich dem Goldenen Kapitel +1% näher.</p>
+              </div>
+            </div>
+            <div class="codex-item">
+              <canvas id="goldpage-codex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Goldene Seite</h3>
+                <p>Gibt wertvolle +50 Punkte und füllt den Fortschritt um +5%!</p>
+              </div>
+            </div>
+            <div class="codex-item">
+              <canvas id="bookmark-codex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Lesezeichen</h3>
+                <p>Verleiht Goldi für kurze Zeit rasanten Tempo-Schub.</p>
+              </div>
+            </div>
+            <div class="codex-item">
+              <canvas id="magnet-codex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Goldstaub</h3>
+                <p>Wirkt wie ein Magnet. Zieht alle Seiten in deiner Nähe an.</p>
+              </div>
+            </div>
+            <div class="codex-item">
+              <canvas id="tea-codex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Heißer Tee</h3>
+                <p>Schenkt Goldi dauerhaft ein zusätzliches Herz.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rechte Spalte: Gefahren -->
+        <div class="codex-column hazards">
+          <h2 style="color: #ef5350;">⚠️ GEFAHREN (Ausweichen)</h2>
+          <div class="codex-list">
+            <div class="codex-item">
+              <canvas id="moth-lex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Buchmotte</h3>
+                <p>Flattert unberechenbar im Zickzack durch die Luft.</p>
+              </div>
+            </div>
+            <div class="codex-item">
+              <canvas id="inkwell-lex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Tintenfass</h3>
+                <p>Stürzt rasant herunter und hinterlässt schmutzige Flecken.</p>
+              </div>
+            </div>
+            <div class="codex-item">
+              <canvas id="web-lex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Spinnwebe</h3>
+                <p>Sinkt langsam herab. In der Mitte sitzt eine rote Giftspinne!</p>
+              </div>
+            </div>
+            <div class="codex-item">
+              <canvas id="evilbook-lex-canvas" width="48" height="48"></canvas>
+              <div class="codex-item-info">
+                <h3>Böses Buch</h3>
+                <p>Vom Schatten korrumpiert. Verfolgt dich aktiv durch den Raum!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p style="color: #ffb300; font-size: 8px;">📢 ACHTUNG: Das Tempo erhöht sich nach ALLEN 10% gesammelten Seiten!</p>
+
+      <button id="start-game-btn" class="btn" style="border-color: #ffd54f; color: #fff;">Ich bin bereit!</button>
+    </div>
+
+    <!-- Game Over Bildschirm -->
+    <div id="gameover-screen" class="overlay hidden">
+      <h1 style="color: #ef5350;">Die Bücher sind verloren...</h1>
+      <p id="gameover-reason">Goldi hat all seine Herzen verloren und ist unsanft auf den Boden geklatscht...</p>
+      <p id="gameover-score" style="color: #ffd54f; font-size: 12px;"></p>
+      <button id="restart-btn" class="btn">Nochmal versuchen</button>
+    </div>
+
+    <!-- Sieg-Bildschirm -->
+    <div id="victory-screen" class="overlay hidden">
+      <h1 style="color: #ffd54f; text-shadow: 0 0 15px rgba(255,213,79,0.8);">Das Goldene Kapitel ist gerettet!</h1>
+      <p>
+        Du hast 100 Seiten gesammelt und das Goldene Kapitel sicher verwahrt! Die Bibliothek leuchtet wieder in dem warmen, magischen Kerzenschein, den wir so lieben. 💖
+      </p>
+      <p id="victory-score" style="color: #a5d6a7; font-size: 12px;"></p>
+      <button id="victory-restart-btn" class="btn">Nochmal spielen</button>
+    </div>
+
+    <!-- Canvas für das eigentliche Spiel -->
+    <canvas id="gameCanvas" width="1024" height="768"></canvas>
+
+    <!-- Mobiler Schwebe-Button -->
+    <div id="mobile-jump-btn">SCHWEBEN</div>
+
+  </div>
+</div>
+
+<script>
+  // ==========================================
+  // CONFIG & GLOBALS
+  // ==========================================
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  ctx.imageSmoothingEnabled = false;
+
+  let gameState = 'START'; // START, DANGER_SCREEN, PLAYING, DYING, GAMEOVER, VICTORY
+  let score = 0;
+  let progress = 0; 
+  let hearts = 3;
+  let maxHearts = 3;
+  
+  let activePowerups = {
+    bookmark: 0,  
+    goldDust: 0,  
+    lamp: 0       
+  };
+
+  let goldi = {
+    x: 512,
+    y: 550,
+    targetX: 512,
+    targetY: 550,
+    width: 72,
+    height: 72,
+    jumpOffset: 0,
+    jumpVelocity: 0,
+    isJumping: false,
+    invincible: 0,
+    direction: 1,
+    deathFallSpeed: 0 // Zum Herabstürzen
+  };
+
+  let items = [];
+  let obstacles = [];
+  let particles = [];
+  let candles = []; 
+
+  let spawnTimers = { item: 0, obstacle: 0, ambientDust: 0 };
+  let windTimer = 0;
+  let windActive = 0; 
+  let windForceX = 0;
+  let frameCount = 0;
+  let finalChapterSpawned = false;
+
+  // Levelup-Meldung Status
+  let speedAlertTimer = 0;
+  let lastSpeedStep = 0;
+
+  // ==========================================
+  // RETRO BITMAP GENERATOR (PROZEDURALES PIXEL-ART)
+  // ==========================================
+  const palette = {
+    '.': null, 
+    'W': '#ffffff', 
+    'w': '#fffdf2', 
+    's': '#e3d2be', 
+    'd': '#bfa38a', 
+    'p': '#ffabbd', 
+    'e': '#210f08', 
+    'g': '#ffca28', 
+    'o': '#ff8f00', 
+    'y': '#fff59d', 
+    'r': '#d84315', 
+    'b': '#33691e', 
+    'k': '#3e2723', 
+    'i': '#1d0d07', 
+    't': '#1a0f30', 
+    'u': '#7e57c2', 
+    'a': '#78909c', 
+    'h': '#ef5350',  
+    'x': '#210f08', // Für die Kreuzaugen bei K.O.
+    'q': '#ff4d6d'  // Für die herausgestreckte rosa Zunge bei K.O.
+  };
+
+  function createPixelSprite(grid, colors, scale = 1) {
+    const height = grid.length;
+    const width = grid[0].replace(/\s/g, '').length;
+    const spriteCanvas = document.createElement('canvas');
+    spriteCanvas.width = width * scale;
+    spriteCanvas.height = height * scale;
+    const sCtx = spriteCanvas.getContext('2d');
+    sCtx.imageSmoothingEnabled = false;
+
+    for (let y = 0; y < height; y++) {
+      const row = grid[y].replace(/\s/g, '');
+      for (let x = 0; x < width; x++) {
+        const char = row[x];
+        if (char && colors[char]) {
+          sCtx.fillStyle = colors[char];
+          sCtx.fillRect(x * scale, y * scale, scale, scale);
+        }
+      }
+    }
+    return spriteCanvas;
+  }
+
+  function flipSprite(originalCanvas) {
+    const flipped = document.createElement('canvas');
+    flipped.width = originalCanvas.width;
+    flipped.height = originalCanvas.height;
+    const fCtx = flipped.getContext('2d');
+    fCtx.imageSmoothingEnabled = false;
+    fCtx.translate(originalCanvas.width, 0);
+    fCtx.scale(-1, 1);
+    fCtx.drawImage(originalCanvas, 0, 0);
+    return flipped;
+  }
+
+  const sprites = {};
+
+  // Goldi Idle (Weiß-goldener Buchgeist nach deiner exakten Vorlage)
+  const goldiIdleMap = [
+    "......gggy........",
+    ".....googg.......",
+    "......goo.........",
+    "...wwwwwwwwww.....",
+    "..wwwwwwwwwwwws...",
+    ".wwwwwwwwwwwwwws..",
+    ".wwwwwwwwwwwwwwss.",
+    "wwwwwwwwwwwwwwwwss",
+    "wwwwwwwwwwwwwwwwss",
+    "wwwweewwwwwweewwss",
+    "wwweeeWewwweeeWwss",
+    "wwweWWWewwweWWWees",
+    "wwwweewwwewwweewws",
+    "wwppppwwwwwwwwppss",
+    "wwppppwwwwwwwwppss",
+    "wwwwwwwwwwwwwwwwss",
+    "wwwwwwwwwwwwwwwsss",
+    ".wwwwwwwwwwwwwsss.",
+    "..wwwwwwwwwwwsss..",
+    "...wwwwwwwwwsss...",
+    "....wswswswsss....",
+    ".....s.s.s.ss....."
+  ];
+
+  const goldiJumpMap = [
+    ".......gggy.......",
+    "......googg.......",
+    "......goo.........",
+    "....wwwwwwww......",
+    "..wwwwwwwwwwww....",
+    "wwwwwwwwwwwwwwww..",
+    "wwwwwwwwwwwwwwwws.",
+    "wwweewwwwwweewwws.",
+    "wweeeWewwweeeWwws.",
+    "wweWWWewwweWWWees.",
+    "wwweewwwewwweewwss",
+    "wwppppwwwwwwwwppss",
+    "wwwwwwwwwwwwwwwwss",
+    "wwwwwwwwwwwwwwwwss",
+    ".wwwwwwwwwwwwwwsss",
+    "..wwwwwwwwwwwwsss.",
+    "...wwwwwwwwwwsss..",
+    "....wwwwwwwwsss...",
+    "....wwwwwwwwsss...",
+    "....wwwwwwwwsss...",
+    ".....wswswswss....",
+    "......s.s.s.s....."
+  ];
+
+  // Goldi K.O. (Auf dem Boden geklatscht nach deiner exakten Referenz!)
+  const goldiDeadMap = [
+    ".............ggy..............",
+    "............gogg..............",
+    ".............goo..............",
+    "........wwwwwwwwwwww..........",
+    ".....wwwwwwwwwwwwwwwwww.......",
+    "   wwwwwwwwwwwwwwwwwwwwww     ",
+    "  wwwwwwwwwwwwwwwwwwwwwwwws   ",
+    " wwwwwxwwxwwwwwwwwxwwxwwwwws  ",
+    " wwwwwwxxwwwwwwwwwwxxwwwwwws  ",
+    " wwwwwxwwxwwwwwwwwxwwxwwwwwss ",
+    " wwppppwwwwwwwwwwwwwwwwppppsss",
+    " wwwwwwwwwwwwwqwwwwwwwwwwsssss", // q = Rosa Zunge
+    " wwwwwwwwwwwwqqqwwwwwwwwwsssss",
+    " .wwwwwwwwwwwqswwwwwwwwwssss. ",
+    " ..wwwwwwwwwwwwwwwwwwwwssss.. ",
+    " ...ssssssssssssssssssssss... "
+  ];
+
+  // Überarbeitete Sammlerstücke (Deutliches, sauberes Buch-Symbol für Seiten)
+  const pageMap = [
+    "...WWWWWWWWWW...",
+    "..WggwwwwwggWW..",
+    ".WgowwwwwwwogWW.",
+    "WgowwwewwwwoogW",
+    "WgowwweewwwoogW",
+    "WgowwwewwwwoogW",
+    "WgowwwwwwwwoogW",
+    "WgowwwewwwwoogW",
+    "WgowwweewwwoogW",
+    ".WgowwwwwwwogW.",
+    "..WgooooooogW..",
+    "...WWWWWWWW...."
+  ];
+
+  const goldPageMap = [
+    "...gggggggggg...",
+    "..ggyyyyyyyygg..",
+    ".ggyoyyyyyyoygg.",
+    "ggyoyyyoyyyoyygo",
+    "ggyoyyyooyyoyygo",
+    "ggyoyyyoyyyoyygo",
+    "ggyoyyyyyyyoyygo",
+    "ggyoyyyoyyyoyygo",
+    "ggyoyyyooyyoyygo",
+    ".ggyoyyyyyyoyg..",
+    "..ggyooooooyg...",
+    "...gggggggg...."
+  ];
+
+  // Hindernis: Buchmotte
+  const mothMap = [
+    "......aaaa......",
+    "..aa..aaaa..aa..",
+    ".aaaa.aaaa.aaaa.",
+    "aaaaaaaaaaaaaaaa",
+    "aaaahhhaaaahhhaa", 
+    ".aaaaaaaaaaaaaa.",
+    "..aaaaaaaaaaaa..",
+    "....aa....aa...."
+  ];
+
+  // Hindernis: Auslaufendes Tintenfass
+  const inkwellMap = [
+    "......rrrr......", 
+    ".....kkkkkk.....",
+    "....ktuttttk....", 
+    "...ktuuuuuttk...",
+    "..ktuutttttttk..",
+    "..ktuutttttttk..",
+    "...ktuttttttk...",
+    "....kkkkkkkk....",
+    ".....ttttt......", 
+    "......ttt......."
+  ];
+
+  // Überarbeitete Spinnwebe (Deutlichere Struktur + rote Giftspinne)
+  const webMap = [
+    "a......a......a",
+    ".a....a.a....a.",
+    "..a..a...a..a..",
+    "...aaahhaaa...", 
+    "..a..ahha..a..",
+    ".a....a.a....a.",
+    "a......a......a"
+  ];
+
+  // Das Legendäre Goldene Kapitel (Wunderbares Buch)
+  const goldenChapterMap = [
+    "......gggggggggggggggg......",
+    "....gggggggggggggggggggg....",
+    "  ggooyyooggooyyooggooyygg  ",
+    " ggooyyooggooyyooggooyygggy ",
+    " gggggggggggggggggggggggggg ",
+    " ggooyyooggooyyoogggggggggg ",
+    " gggggggggggggggggggggggggg ",
+    " ggooyyooggooyyoogggggggggg ",
+    " gggggggggggggggggggggggggg ",
+    " ggooyyooggooyyoogggggggggg ",
+    "  gggggggggggggggggggggggg  ",
+    "    gggggggggggggggggggg    ",
+    "      gggggggggggggggg      "
+  ];
+
+  function initSprites() {
+    sprites.goldiIdleRight = createPixelSprite(goldiIdleMap, palette, 4);
+    sprites.goldiIdleLeft = flipSprite(sprites.goldiIdleRight);
+    
+    sprites.goldiJumpRight = createPixelSprite(goldiJumpMap, palette, 4);
+    sprites.goldiJumpLeft = flipSprite(sprites.goldiJumpRight);
+
+    sprites.goldiDeadRight = createPixelSprite(goldiDeadMap, palette, 4.2);
+    sprites.goldiDeadLeft = flipSprite(sprites.goldiDeadRight);
+
+    sprites.page = createPixelSprite(pageMap, palette, 3);
+    sprites.goldPage = createPixelSprite(goldPageMap, palette, 3);
+    
+    sprites.bookmark = createPixelSprite([
+      "....rrrrrr......",
+      "....rrrrrr......",
+      "....rgggrr......",
+      "....rrrrrr......",
+      "....rgggrr......",
+      "....rrrrrr......",
+      ".....rrrr.......",
+      "......rr........",
+      "......gg........"
+    ], palette, 3.5);
+
+    sprites.goldDust = createPixelSprite([
+      ".....WWWW.......",
+      "....WggggW......",
+      "...WggggggW.....",
+      "..WggooyyggW....",
+      "..WggggggggW....",
+      "...WggggggW.....",
+      "....WWWWWW......"
+    ], palette, 3.5);
+
+    sprites.lamp = createPixelSprite([
+      "......ggg.......",
+      "....ggggggg.....",
+      "...ggyyyyygg....",
+      "....gWWWWgg.....",
+      ".....eewe.......",
+      ".....eewe.......",
+      "....ccccccc....."
+    ], palette, 3.5);
+
+    sprites.tea = createPixelSprite([
+      "....W.W.W.......",
+      "...bbbbbbb......",
+      "..bbbbbbbbb.b...",
+      "..bbkkkkkbbbb...",
+      "..bbbbbbbbb.....",
+      "....bbbb........"
+    ], palette, 3.5);
+
+    sprites.moth = createPixelSprite(mothMap, palette, 4);
+    sprites.inkwell = createPixelSprite(inkwellMap, palette, 4);
+    sprites.web = createPixelSprite(webMap, palette, 6);
+    sprites.goldenChapter = createPixelSprite(goldenChapterMap, palette, 4);
+  }
+
+  // ==========================================
+  // HINTERGRUND-RENDERER
+  // ==========================================
+  const bgCanvas = document.createElement('canvas');
+  bgCanvas.width = 1024;
+  bgCanvas.height = 768;
+  const bgCtx = bgCanvas.getContext('2d');
+
+  function renderCozyLibraryBackground() {
+    // 1. Extrem gemütlicher, warmer, ultra-dunkler Hintergrund-Farbton
+    const gradient = bgCtx.createLinearGradient(0, 0, 0, 768);
+    gradient.addColorStop(0, '#090403');
+    gradient.addColorStop(0.5, '#120805');
+    gradient.addColorStop(1, '#1b0e09');
+    bgCtx.fillStyle = gradient;
+    bgCtx.fillRect(0, 0, 1024, 768);
+
+    // 2. Vertikale, schwere Holzpfeiler (Bücherregale)
+    bgCtx.fillStyle = '#1c0e09';
+    const pillarWidth = 28;
+    const pillars = [15, 260, 500, 740, 1005];
+    pillars.forEach(x => {
+      bgCtx.fillRect(x, 0, pillarWidth, 620);
+      bgCtx.fillStyle = '#110805';
+      bgCtx.fillRect(x + 4, 0, 3, 620);
+      bgCtx.fillRect(x + 18, 0, 2, 620);
+      bgCtx.fillStyle = '#1c0e09';
+    });
+
+    // 3. Horizontale Regalböden (Enden bei Y=600 vor dem Dielenboden)
+    const shelves = [120, 240, 360, 480, 600];
+    shelves.forEach(y => {
+      bgCtx.fillStyle = '#2d1810';
+      bgCtx.fillRect(0, y, 1024, 18);
+      bgCtx.fillStyle = '#422418';
+      bgCtx.fillRect(0, y, 1024, 4);
+      bgCtx.fillStyle = '#0a0402';
+      bgCtx.fillRect(0, y + 14, 1024, 4);
+    });
+
+    // 4. Regal-Bücher & liebevolle Deko aus dem Originalbild
+    candles = []; 
+
+    for (let s = 0; s < shelves.length; s++) {
+      const shelfY = shelves[s];
+      for (let p = 0; p < pillars.length - 1; p++) {
+        const leftWall = pillars[p] + pillarWidth;
+        const rightWall = pillars[p + 1];
+        const colWidth = rightWall - leftWall;
+
+        let currentX = leftWall + 10;
+        while (currentX < rightWall - 15) {
+          const bWidth = Math.floor(Math.random() * 8) + 8;
+          const bHeight = Math.floor(Math.random() * 30) + 35;
+          const bColors = ['#422218', '#5a3120', '#2d4218', '#634b21', '#213342', '#361b3b'];
+          const bColor = bColors[Math.floor(Math.random() * bColors.length)];
+          
+          if (currentX + bWidth > rightWall - 5) break;
+
+          bgCtx.fillStyle = bColor;
+          bgCtx.fillRect(currentX, shelfY - bHeight, bWidth, bHeight);
+
+          if (Math.random() < 0.6) {
+            bgCtx.fillStyle = 'rgba(255, 213, 79, 0.2)';
+            bgCtx.fillRect(currentX + 2, shelfY - bHeight + 4, bWidth - 4, 2);
+            bgCtx.fillRect(currentX + 2, shelfY - bHeight + 10, bWidth - 4, 1);
+          }
+
+          currentX += bWidth + 2;
+        }
+
+        if (Math.random() < 0.3) {
+          bgCtx.fillStyle = '#1d3310';
+          let ivyLength = Math.floor(Math.random() * 35) + 15;
+          let startX = leftWall + colWidth / 2 + (Math.random() * 30 - 15);
+          bgCtx.fillRect(startX, shelfY, 3, ivyLength);
+          for (let l = 0; l < ivyLength; l += 6) {
+            bgCtx.fillRect(startX - 3, shelfY + l, 3, 3);
+            bgCtx.fillRect(startX + 3, shelfY + l + 2, 3, 3);
+          }
+        }
+
+        if (Math.random() < 0.4) {
+          const candleX = leftWall + Math.random() * (colWidth - 25) + 5;
+          const candleY = shelfY - 14;
+          bgCtx.fillStyle = '#e8d8c8';
+          bgCtx.fillRect(candleX, candleY, 5, 14); 
+          bgCtx.fillStyle = '#211008';
+          bgCtx.fillRect(candleX + 2, candleY - 3, 1, 3); 
+          candles.push({ x: candleX + 2, y: candleY - 4 });
+        }
+      }
+    }
+
+    // 5. Holz-Dielenboden am unteren Bildschirmrand (Exakt wie Referenz!)
+    const floorY = 600;
+    const floorHeight = 168;
+    const floorGrad = bgCtx.createLinearGradient(0, floorY, 0, 768);
+    floorGrad.addColorStop(0, '#1a0c08');
+    floorGrad.addColorStop(1, '#0e0604');
+    bgCtx.fillStyle = floorGrad;
+    bgCtx.fillRect(0, floorY, 1024, floorHeight);
+
+    bgCtx.strokeStyle = '#070302';
+    bgCtx.lineWidth = 4;
+    for (let h = floorY; h < 768; h += 32) {
+      bgCtx.beginPath();
+      bgCtx.moveTo(0, h);
+      bgCtx.lineTo(1024, h);
+      bgCtx.stroke();
+    }
+
+    bgCtx.lineWidth = 2;
+    for (let x = 80; x < 1024; x += 180) {
+      bgCtx.beginPath();
+      bgCtx.moveTo(x, floorY);
+      bgCtx.lineTo(x - 30, 768);
+      bgCtx.stroke();
+    }
+
+    // 6. Bücher und Details auf dem Boden (Exakt wie Referenzbild!)
+    drawOpenBook(180, 670, bgCtx);
+    drawOpenBook(720, 700, bgCtx);
+
+    drawClosedBook(380, 680, '#5a2018', bgCtx); 
+    drawClosedBook(580, 710, '#2d1c3b', bgCtx); 
+    drawClosedBook(90, 720, '#1c3021', bgCtx);  
+
+    const floorCandles = [
+      { x: 130, y: 730 },
+      { x: 530, y: 670 },
+      { x: 890, y: 720 }
+    ];
+    floorCandles.forEach(fc => {
+      bgCtx.fillStyle = '#e8d8c8';
+      bgCtx.fillRect(fc.x - 3, fc.y, 6, 18);
+      bgCtx.fillStyle = '#1c0b05';
+      bgCtx.fillRect(fc.x - 1, fc.y - 3, 2, 3);
+      candles.push({ x: fc.x, y: fc.y - 4 });
+    });
+
+    // 7. Bilderrahmen an der Rückwand
+    bgCtx.fillStyle = '#2a150e';
+    bgCtx.fillRect(160, 45, 34, 42);
+    bgCtx.fillStyle = '#eed9c4';
+    bgCtx.fillRect(164, 49, 26, 34);
+    bgCtx.fillStyle = '#bd3a28';
+    bgCtx.fillRect(174, 60, 6, 6);
+    bgCtx.fillStyle = '#2e5e1b';
+    bgCtx.fillRect(176, 66, 2, 10);
+
+    bgCtx.fillStyle = '#2a150e';
+    bgCtx.fillRect(860, 45, 34, 42);
+    bgCtx.fillStyle = '#eed9c4';
+    bgCtx.fillRect(864, 49, 26, 34);
+    bgCtx.fillStyle = '#bd3a28';
+    bgCtx.fillRect(874, 60, 6, 6);
+    bgCtx.fillStyle = '#2e5e1b';
+    bgCtx.fillRect(876, 66, 2, 10);
+
+    bgCtx.strokeStyle = 'rgba(255, 179, 0, 0.4)';
+    bgCtx.lineWidth = 2;
+    bgCtx.beginPath();
+    bgCtx.moveTo(0, 30);
+    for (let x = 0; x <= 1024; x += 10) {
+      let y = 30 + Math.sin(x * 0.03) * 15;
+      bgCtx.lineTo(x, y);
+    }
+    bgCtx.stroke();
+  }
+
+  function drawOpenBook(cx, cy, targetCtx) {
+    targetCtx.save();
+    targetCtx.fillStyle = '#422418';
+    targetCtx.fillRect(cx - 36, cy - 2, 72, 16);
+    
+    targetCtx.fillStyle = '#f5ebd5';
+    targetCtx.fillRect(cx - 32, cy - 8, 30, 14);
+    
+    targetCtx.fillStyle = '#fffdf0';
+    targetCtx.fillRect(cx + 2, cy - 8, 30, 14);
+
+    targetCtx.fillStyle = '#8c7662';
+    targetCtx.fillRect(cx - 1, cy - 8, 3, 14);
+
+    targetCtx.fillStyle = '#3e2723';
+    targetCtx.globalAlpha = 0.6;
+    for (let r = 0; r < 4; r++) {
+      targetCtx.fillRect(cx - 26, cy - 5 + r * 3, 18, 1.5);
+      targetCtx.fillRect(cx + 8, cy - 5 + r * 3, 18, 1.5);
+    }
+    targetCtx.restore();
+  }
+
+  function drawClosedBook(cx, cy, color, targetCtx) {
+    targetCtx.save();
+    targetCtx.fillStyle = color;
+    targetCtx.fillRect(cx - 22, cy, 44, 10);
+    targetCtx.fillStyle = '#e8d8c8';
+    targetCtx.fillRect(cx + 14, cy + 2, 6, 6);
+    targetCtx.fillStyle = '#ff8f00';
+    targetCtx.fillRect(cx - 4, cy + 4, 8, 3);
+    targetCtx.fillRect(cx - 2, cy + 2, 4, 2);
+    targetCtx.restore();
+  }
+
+  // ==========================================
+  // WEB AUDIO ENGINE (RETRO-SOUNDSYNTHESE)
+  // ==========================================
+  const AudioController = {
+    ctx: null,
+    muted: false,
+    ambientNotes: [57, 60, 62, 64, 67, 69, 72], 
+    chordIndex: 0,
+    nextChordTime: 0,
+
+    init() {
+      if (!this.ctx) {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.startAmbientMusic();
+      }
+    },
+
+    toggleMute() {
+      this.muted = !this.muted;
+      const btn = document.getElementById('mute-btn');
+      btn.innerText = this.muted ? "🎵 Musik: Stumm" : "🎵 Musik: An";
+    },
+
+    playTone(freq, type, duration, gainStart, slideTo = null) {
+      if (this.muted || !this.ctx) return;
+      
+      if (this.ctx.state === 'suspended') {
+        this.ctx.resume();
+      }
+
+      const osc = this.ctx.createOscillator();
+      const gainNode = this.ctx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+      
+      if (slideTo) {
+        osc.frequency.exponentialRampToValueAtTime(slideTo, this.ctx.currentTime + duration);
+      }
+
+      gainNode.gain.setValueAtTime(gainStart, this.ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+
+      osc.connect(gainNode);
+      gainNode.connect(this.ctx.destination);
+
+      osc.start();
+      osc.stop(this.ctx.currentTime + duration);
+    },
+
+    playCollect() {
+      this.playTone(587.33, 'triangle', 0.15, 0.25, 987.77); 
+    },
+
+    playGoldCollect() {
+      const now = this.ctx ? this.ctx.currentTime : 0;
+      const notes = [587.33, 698.46, 880.00, 1174.66]; 
+      notes.forEach((freq, idx) => {
+        setTimeout(() => {
+          this.playTone(freq, 'sine', 0.3, 0.25);
+        }, idx * 50);
+      });
+    },
+
+    playJump() {
+      this.playTone(196.00, 'triangle', 0.25, 0.35, 493.88); 
+    },
+
+    playHit() {
+      this.playTone(130.81, 'sawtooth', 0.45, 0.4, 32.7); 
+    },
+
+    playPowerup() {
+      this.playTone(392.00, 'sine', 0.5, 0.3, 1567.98); 
+    },
+
+    playSplat() {
+      // Lustiges, trauriges Platschen / Aufprallen wie im neuen Referenzbild
+      this.playTone(330, 'sawtooth', 0.25, 0.45, 45); 
+      setTimeout(() => {
+        this.playTone(70, 'triangle', 0.35, 0.35);
+      }, 100);
+    },
+
+    playGameOver() {
+      const notes = [392.00, 349.23, 311.13, 246.94]; 
+      notes.forEach((freq, idx) => {
+        setTimeout(() => {
+          this.playTone(freq, 'triangle', 0.5, 0.3);
+        }, idx * 150);
+      });
+    },
+
+    playVictory() {
+      const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+      notes.forEach((freq, idx) => {
+        setTimeout(() => {
+          this.playTone(freq, 'sine', 0.6, 0.25);
+        }, idx * 100);
+      });
+    },
+
+    startAmbientMusic() {
+      setInterval(() => {
+        if (this.muted || !this.ctx || gameState !== 'PLAYING') return;
+
+        const time = this.ctx.currentTime;
+        if (time > this.nextChordTime) {
+          const baseChord = [45, 48, 50, 52][this.chordIndex]; 
+          const freqBass = 440 * Math.pow(2, (baseChord - 69) / 12);
+          
+          this.playTone(freqBass, 'sine', 3.5, 0.15);
+
+          for (let i = 0; i < 3; i++) {
+            const randomOffset = Math.random() * 2.0;
+            const note = this.ambientNotes[Math.floor(Math.random() * this.ambientNotes.length)];
+            const freqMelody = 440 * Math.pow(2, (note - 69) / 12);
+            
+            setTimeout(() => {
+              if (gameState === 'PLAYING') {
+                this.playTone(freqMelody, 'sine', 1.5, 0.08);
+              }
+            }, randomOffset * 1000);
+          }
+
+          this.chordIndex = (this.chordIndex + 1) % 4;
+          this.nextChordTime = time + 3.5;
+        }
+      }, 500);
+    }
+  };
+
+  document.getElementById('mute-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    AudioController.toggleMute();
+  });
+
+  // ==========================================
+  // PARTIKEL-EFFEKTE (GOLDSTAUB & FUNKELN)
+  // ==========================================
+  class Particle {
+    constructor(x, y, color, size, vx, vy, life) {
+      this.x = x;
+      this.y = y;
+      this.color = color;
+      this.size = size;
+      this.vx = vx;
+      this.vy = vy;
+      this.maxLife = life;
+      this.life = life;
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.life--;
+    }
+
+    draw(targetCtx) {
+      const alpha = this.life / this.maxLife;
+      targetCtx.save();
+      targetCtx.globalAlpha = alpha;
+      targetCtx.fillStyle = this.color;
+      targetCtx.shadowBlur = 8;
+      targetCtx.shadowColor = this.color;
+      targetCtx.fillRect(this.x, this.y, this.size, this.size);
+      targetCtx.restore();
+    }
+  }
+
+  function spawnCollectBurst(x, y, color = '#ffd54f') {
+    for (let i = 0; i < 15; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 3 + 1;
+      const size = Math.random() * 4 + 2;
+      particles.push(new Particle(
+        x, y, 
+        color, 
+        size, 
+        Math.cos(angle) * speed, 
+        Math.sin(angle) * speed, 
+        Math.floor(Math.random() * 20) + 15
+      ));
+    }
+  }
+
+  function spawnGoldiTrail() {
+    if (gameState !== 'PLAYING') return;
+    if (frameCount % 3 === 0) {
+      const offset = (Math.random() - 0.5) * 40;
+      const isSpeedy = activePowerups.bookmark > 0;
+      particles.push(new Particle(
+        goldi.x + offset, 
+        goldi.y + goldi.jumpOffset + 24, 
+        isSpeedy ? '#ff5722' : '#ffca28', 
+        Math.random() * 4 + 2, 
+        (Math.random() - 0.5) * 1, 
+        Math.random() * 1 + 1, 
+        25
+      ));
+    }
+  }
+
+  // ==========================================
+  // DYNAMISCHE SCHWIERIGKEIT (ERHÖHT ALLE 10%)
+  // ==========================================
+  function getDifficultySpeedMultiplier() {
+    // Teilt Fortschritt (0-100) in Stufen ein (0=0%, 1=10%, 2=20%, ... 9=90%)
+    const activeStep = Math.min(9, Math.floor(progress / 10));
+    
+    // Nach jedem 10%-Schnitt erhöht sich das Tempo um 9%.
+    // Bei 90% Progress beträgt der Multiplikator 1.0 + 9 * 0.09 = 1.81x (sehr schnell, aber schaffbar!)
+    return 1.0 + activeStep * 0.09; 
+  }
+
+  // ==========================================
+  // GAMEPLAY LOGIC & ENTITIES
+  // ==========================================
+  
+  class Item {
+    constructor(x, y, type) {
+      this.x = x;
+      this.y = y;
+      this.type = type; 
+      this.width = 32;
+      this.height = 32;
+      this.vy = Math.random() * 1.0 + 1.2;
+      this.vx = 0;
+      this.angle = Math.random() * Math.PI; 
+      this.swaySpeed = Math.random() * 0.02 + 0.01;
+      
+      if (type === 'finalChapter') {
+        this.width = 112;
+        this.height = 52;
+        this.vy = 0.7;
+      }
+    }
+
+    update() {
+      if (activePowerups.goldDust > 0 && this.type !== 'finalChapter') {
+        const dx = goldi.x - this.x;
+        const dy = (goldi.y + goldi.jumpOffset) - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 320) {
+          const force = (320 - dist) / 320 * 6.5;
+          this.x += (dx / dist) * force;
+          this.y += (dy / dist) * force;
+          
+          if (frameCount % 5 === 0) {
+            particles.push(new Particle(this.x, this.y, '#ffd54f', 2.5, 0, 0, 10));
+          }
+        }
+      }
+
+      if (windActive > 0) {
+        this.x += windForceX * 0.45;
+      }
+
+      if (this.type === 'page' || this.type === 'goldPage') {
+        this.angle += this.swaySpeed;
+        this.vx = Math.sin(this.angle) * 1.4;
+      }
+
+      this.x += this.vx;
+      this.y += this.vy;
+    }
+
+    draw() {
+      ctx.save();
+      const auraPulse = Math.sin(frameCount * 0.1) * 6 + 12;
+      ctx.shadowBlur = auraPulse;
+      if (this.type === 'goldPage' || this.type === 'finalChapter') {
+        ctx.shadowColor = '#ffd54f';
+      } else if (this.type === 'page') {
+        ctx.shadowColor = '#fffdf0';
+      } else {
+        ctx.shadowColor = '#81c784'; 
+      }
+
+      let img = sprites.page;
+      if (this.type === 'goldPage') img = sprites.goldPage;
+      else if (this.type === 'bookmark') img = sprites.bookmark;
+      else if (this.type === 'goldDust') img = sprites.goldDust;
+      else if (this.type === 'lamp') img = sprites.lamp;
+      else if (this.type === 'tea') img = sprites.tea;
+      else if (this.type === 'finalChapter') img = sprites.goldenChapter;
+
+      ctx.drawImage(img, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+      ctx.restore();
+    }
+  }
+
+  class Obstacle {
+    constructor(x, y, type) {
+      this.x = x;
+      this.y = y;
+      this.type = type; 
+      this.vx = 0;
+      this.vy = 0;
+      this.width = 44;
+      this.height = 44;
+      this.rotation = 0;
+      this.rotSpeed = (Math.random() - 0.5) * 0.04;
+
+      switch (type) {
+        case 'moth':
+          this.width = 48;
+          this.height = 32;
+          this.vy = Math.random() * 1.5 + 1.5;
+          this.vx = (Math.random() - 0.5) * 3; 
+          break;
+        case 'inkwell':
+          this.width = 44;
+          this.height = 44;
+          this.vy = Math.random() * 2.5 + 2.5; 
+          break;
+        case 'web':
+          this.width = 72;
+          this.height = 72;
+          this.vy = Math.random() * 0.6 + 0.6; 
+          this.vx = (Math.random() - 0.5) * 0.4;
+          break;
+        case 'bookStack':
+          this.width = 80;
+          this.height = 40;
+          this.vy = Math.random() * 1.5 + 3.0; 
+          break;
+        case 'ladder':
+          this.width = 48;
+          this.height = 110;
+          this.y = 600 - 10; 
+          this.vx = Math.random() > 0.5 ? 2.8 : -2.8; 
+          this.vy = 0;
+          if (this.vx < 0) this.x = 1024;
+          else this.x = -this.width;
+          break;
+        case 'clock':
+          this.width = 48;
+          this.height = 120;
+          this.vy = 1.8; 
+          this.targetY = Math.random() * 180 + 80;
+          this.pendulumAngle = 0;
+          break;
+        case 'evilBook':
+          this.width = 54;
+          this.height = 44;
+          this.vy = 1.2;
+          this.vx = (Math.random() - 0.5) * 1.5;
+          break;
+      }
+    }
+
+    update() {
+      const difficultyScale = getDifficultySpeedMultiplier();
+      const speedMult = (activePowerups.lamp > 0 ? 0.35 : 1.0) * difficultyScale;
+
+      if (windActive > 0 && this.type !== 'ladder') {
+        this.x += windForceX * 0.7 * speedMult;
+      }
+
+      switch (this.type) {
+        case 'moth':
+          this.x += this.vx * speedMult;
+          this.y += this.vy * speedMult;
+          if (frameCount % 10 === 0) this.vx = (Math.random() - 0.5) * 4;
+          break;
+        case 'inkwell':
+          this.y += this.vy * speedMult;
+          if (frameCount % 4 === 0) {
+            particles.push(new Particle(this.x, this.y + 10, '#1a0f30', 5, 0, 1.5, 12));
+          }
+          break;
+        case 'web':
+          this.x += this.vx * speedMult;
+          this.y += this.vy * speedMult;
+          this.rotation += this.rotSpeed * speedMult;
+          break;
+        case 'bookStack':
+          this.y += this.vy * speedMult;
+          this.rotation += this.rotSpeed * speedMult;
+          break;
+        case 'ladder':
+          this.x += this.vx * speedMult;
+          if (frameCount % 6 === 0) {
+            particles.push(new Particle(this.x + this.width / 2, 740, '#422418', 4, -this.vx * 0.2, -Math.random() * 1.2, 12));
+          }
+          break;
+        case 'clock':
+          if (this.y < this.targetY) {
+            this.y += this.vy * speedMult;
+          } else {
+            this.pendulumAngle += 0.045 * speedMult;
+            this.vx = Math.sin(this.pendulumAngle) * 4.2;
+            this.x += this.vx * speedMult;
+          }
+          break;
+        case 'evilBook':
+          const dx = goldi.x - this.x;
+          this.vx += Math.sign(dx) * 0.1 * difficultyScale; 
+          this.vx = Math.max(-2.8 * difficultyScale, Math.min(2.8 * difficultyScale, this.vx));
+          this.x += this.vx * speedMult;
+          this.y += this.vy * speedMult;
+          break;
+      }
+    }
+
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+
+      const dangerPulse = Math.sin(frameCount * 0.15) * 8 + 14;
+      ctx.shadowBlur = dangerPulse;
+      ctx.shadowColor = '#d84315'; 
+
+      let img = sprites.moth;
+      if (this.type === 'inkwell') img = sprites.inkwell;
+      else if (this.type === 'web') img = sprites.web;
+      else if (this.type === 'bookStack') {
+        ctx.restore();
+        ctx.save();
+        const dangerPulse2 = Math.sin(frameCount * 0.15) * 8 + 14;
+        ctx.shadowBlur = dangerPulse2;
+        ctx.shadowColor = '#d84315';
+        ctx.fillStyle = '#b71c1c';
+        ctx.fillRect(this.x - 32, this.y - 12, 64, 10);
+        ctx.fillStyle = '#0d47a1';
+        ctx.fillRect(this.x - 28, this.y - 2, 56, 10);
+        ctx.fillStyle = '#ff8f00';
+        ctx.fillRect(this.x - 34, this.y + 8, 68, 10);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(this.x - 26, this.y - 9, 52, 3); 
+        ctx.fillRect(this.x - 22, this.y + 1, 44, 3); 
+        ctx.restore();
+        return;
+      }
+      else if (this.type === 'ladder') {
+        ctx.restore();
+        ctx.save();
+        const dangerPulse2 = Math.sin(frameCount * 0.15) * 8 + 14;
+        ctx.shadowBlur = dangerPulse2;
+        ctx.shadowColor = '#d84315';
+        ctx.strokeStyle = '#5d4037';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(this.x - 16, this.y, 32, this.height);
+        ctx.fillStyle = '#3e2723';
+        for (let i = 15; i < this.height; i += 20) {
+          ctx.fillRect(this.x - 16, this.y + i, 32, 6);
+        }
+        ctx.restore();
+        return;
+      }
+      else if (this.type === 'clock') {
+        ctx.restore();
+        ctx.save();
+        const dangerPulse2 = Math.sin(frameCount * 0.15) * 8 + 14;
+        ctx.shadowBlur = dangerPulse2;
+        ctx.shadowColor = '#d84315';
+        ctx.fillStyle = '#3e2723';
+        ctx.fillRect(this.x - 20, this.y, 40, 120);
+        ctx.fillStyle = '#fff8e1';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y + 25, 12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#000';
+        ctx.fillRect(this.x - 1, this.y + 18, 2, 8); 
+        ctx.fillStyle = '#1a0c06';
+        ctx.fillRect(this.x - 6, this.y + 50, 12, 55);
+        ctx.fillStyle = '#d84315'; 
+        const pOffset = Math.sin(frameCount * 0.08) * 8;
+        ctx.beginPath();
+        ctx.arc(this.x + pOffset, this.y + 90, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        return;
+      }
+      else if (this.type === 'evilBook') {
+        const isUp = Math.sin(frameCount * 0.2) > 0;
+        ctx.restore();
+        ctx.save();
+        const dangerPulse2 = Math.sin(frameCount * 0.15) * 8 + 14;
+        ctx.shadowBlur = dangerPulse2;
+        ctx.shadowColor = '#d84315';
+        ctx.fillStyle = '#311b92'; 
+        ctx.fillRect(this.x - 22, this.y - 12, 44, 24);
+        ctx.fillStyle = '#ef5350'; 
+        ctx.fillRect(this.x - 10, this.y - 3, 4, 4);
+        ctx.fillRect(this.x + 6, this.y - 3, 4, 4);
+        ctx.fillStyle = '#5c3820';
+        if (isUp) {
+          ctx.fillRect(this.x - 30, this.y - 18, 8, 12);
+          ctx.fillRect(this.x + 22, this.y - 18, 8, 12);
+        } else {
+          ctx.fillRect(this.x - 30, this.y, 8, 12);
+          ctx.fillRect(this.x + 22, this.y, 8, 12);
+        }
+        ctx.restore();
+        return;
+      }
+
+      ctx.drawImage(img, -this.width / 2, -this.height / 2, this.width, this.height);
+      ctx.restore();
+    }
+  }
+
+  // ==========================================
+  // INPUT CONTROLLER
+  // ==========================================
+  window.addEventListener('mousemove', (e) => {
+    if (gameState !== 'PLAYING') return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    goldi.targetX = (e.clientX - rect.left) * scaleX;
+    goldi.targetY = (e.clientY - rect.top) * scaleY;
+  });
+
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault(); 
+    if (gameState !== 'PLAYING') return;
+    if (e.touches.length > 0) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      goldi.targetX = (e.touches[0].clientX - rect.left) * scaleX;
+      goldi.targetY = (e.touches[0].clientY - rect.top) * scaleY;
+    }
+  }, { passive: false });
+
+  window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    if (gameState === 'PLAYING') {
+      triggerSchweben();
+    }
+  });
+
+  document.getElementById('mobile-jump-btn').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameState === 'PLAYING') {
+      triggerSchweben();
+    }
+  });
+
+  function triggerSchweben() {
+    AudioController.init();
+    goldi.jumpVelocity = -17;
+    goldi.isJumping = true;
+    AudioController.playJump();
+    
+    for (let i = 0; i < 20; i++) {
+      particles.push(new Particle(
+        goldi.x + (Math.random() - 0.5) * 50, 
+        goldi.y + goldi.jumpOffset + 30, 
+        '#ffe082', 
+        Math.random() * 5 + 3, 
+        (Math.random() - 0.5) * 6, 
+        Math.random() * 3 + 1, 
+        25
+      ));
+    }
+  }
+
+  // ==========================================
+  // PROGRESSED SPAWN SYSTEM
+  // ==========================================
+  function handleSpawning() {
+    const activeStep = Math.min(9, Math.floor(progress / 10));
+
+    // 1. ITEMS SPAWNEN (Seiten, Power-ups)
+    if (spawnTimers.item <= 0) {
+      const spawnX = Math.random() * (canvas.width - 100) + 50;
+      const rand = Math.random();
+      let type = 'page';
+      
+      if (rand < 0.16) {
+        const goldPageChance = 0.16 - (progress / 100) * 0.08;
+        type = Math.random() < goldPageChance ? 'goldPage' : 'page';
+      } else if (rand < 0.23) {
+        const powerUps = ['bookmark', 'goldDust', 'lamp', 'tea'];
+        type = powerUps[Math.floor(Math.random() * powerUps.length)];
+      }
+
+      if (!finalChapterSpawned && progress >= 100) {
+        items.push(new Item(512, -50, 'finalChapter'));
+        finalChapterSpawned = true;
+      } else if (!finalChapterSpawned) {
+        items.push(new Item(spawnX, -30, type));
+      }
+
+      spawnTimers.item = Math.max(45, 95 - (progress * 0.45));
+    } else {
+      spawnTimers.item--;
+    }
+
+    // 2. HINDERNISSE & GEGNER SPAWNEN (Beschleunigt feinstufig nach allen 10%)
+    if (spawnTimers.obstacle <= 0) {
+      const spawnX = Math.random() * (canvas.width - 100) + 50;
+      
+      const pool = ['moth', 'inkwell'];
+      if (progress > 15) pool.push('web');
+      if (progress > 30) pool.push('bookStack', 'evilBook');
+      if (progress > 50) pool.push('ladder', 'clock');
+
+      const selectedType = pool[Math.floor(Math.random() * pool.length)];
+      obstacles.push(new Obstacle(spawnX, -50, selectedType));
+
+      // Spawngeschwindigkeit für Hindernisse verringert die Pausen mit jeder Stufe!
+      const baseSpawnDelay = 120 - activeStep * 8.5; // Stufe 9: 43 Frames (sehr aktiv!)
+      spawnTimers.obstacle = Math.max(18, baseSpawnDelay + Math.random() * 25);
+    } else {
+      spawnTimers.obstacle--;
+    }
+
+    // 3. AMBIENT GOLDSTAUB
+    if (spawnTimers.ambientDust <= 0) {
+      particles.push(new Particle(
+        Math.random() * canvas.width,
+        780, 
+        'rgba(255, 202, 40, 0.35)',
+        Math.random() * 3 + 1,
+        (Math.random() - 0.5) * 0.4,
+        -Math.random() * 0.6 - 0.3, 
+        Math.random() * 200 + 150
+      ));
+      spawnTimers.ambientDust = Math.floor(Math.random() * 8) + 4;
+    } else {
+      spawnTimers.ambientDust--;
+    }
+
+    // 4. RANDOM EVENTS: PAPIERSTURM
+    if (windTimer <= 0) {
+      windActive = 300;
+      windForceX = Math.random() > 0.5 ? 4.2 : -4.2;
+      windTimer = Math.floor(Math.random() * 600) + 900; 
+    } else {
+      if (windActive > 0) {
+        windActive--;
+        if (frameCount % 3 === 0) {
+          particles.push(new Particle(
+            windForceX > 0 ? -10 : 1034,
+            Math.random() * canvas.height,
+            'rgba(255,255,255,0.12)',
+            Math.random() * 12 + 8,
+            windForceX * (Math.random() * 0.4 + 0.8),
+            (Math.random() - 0.5) * 0.4,
+            120
+          ));
+        }
+      } else {
+        windTimer--;
+      }
+    }
+  }
+
+  // ==========================================
+  // UPDATING GAME LOOP
+  // ==========================================
+  function update() {
+    if (gameState === 'DYING') {
+      // Physikalischer Absturz auf den Holzdielenboden bei K.O.
+      goldi.y += goldi.deathFallSpeed;
+      goldi.deathFallSpeed += 0.8; // Schwerkraft-Effekt
+
+      // Wenn er den Holzdielenboden berührt (Bodenhöhe ca. 630px)
+      if (goldi.y >= 635) {
+        goldi.y = 635;
+        goldi.jumpOffset = 0; // Flat-Effekt greift
+        gameState = 'GAMEOVER';
+        AudioController.playSplat(); // Platschen / Klatschen
+        
+        // Staubwolken auf dem Boden spawnen
+        for (let i = 0; i < 25; i++) {
+          particles.push(new Particle(
+            goldi.x + (Math.random() - 0.5) * 110,
+            655,
+            Math.random() > 0.4 ? '#e3d2be' : '#fffdf2',
+            Math.random() * 6 + 3,
+            (Math.random() - 0.5) * 5,
+            -Math.random() * 3 - 1,
+            35
+          ));
+        }
+
+        setTimeout(() => {
+          AudioController.playGameOver();
+          showGameOverScreen();
+        }, 800);
+      }
+
+      // Partikel updaten damit Staub und Funken weiterziehen
+      for (let p = particles.length - 1; p >= 0; p--) {
+        particles[p].update();
+        if (particles[p].life <= 0) particles.splice(p, 1);
+      }
+      return;
+    }
+
+    frameCount++;
+
+    // Banner alert verringern
+    if (speedAlertTimer > 0) speedAlertTimer--;
+
+    const lerpFactor = activePowerups.bookmark > 0 ? 0.16 : 0.08;
+    
+    if (goldi.targetX > goldi.x + 2) goldi.direction = 1;
+    else if (goldi.targetX < goldi.x - 2) goldi.direction = -1;
+
+    goldi.x += (goldi.targetX - goldi.x) * lerpFactor;
+    
+    const targetYWithOffset = goldi.targetY;
+    goldi.y += (targetYWithOffset - goldi.y) * lerpFactor;
+
+    if (goldi.isJumping) {
+      goldi.jumpOffset += goldi.jumpVelocity;
+      goldi.jumpVelocity += 0.85; 
+      
+      if (goldi.jumpOffset >= 0) {
+        goldi.jumpOffset = 0;
+        goldi.jumpVelocity = 0;
+        goldi.isJumping = false;
+      }
+    }
+
+    goldi.x = Math.max(50, Math.min(canvas.width - 50, goldi.x));
+    goldi.y = Math.max(100, Math.min(canvas.height - 100, goldi.y));
+
+    spawnGoldiTrail();
+
+    if (goldi.invincible > 0) goldi.invincible--;
+
+    for (let key in activePowerups) {
+      if (activePowerups[key] > 0) activePowerups[key]--;
+    }
+
+    handleSpawning();
+
+    for (let i = items.length - 1; i >= 0; i--) {
+      const item = items[i];
+      item.update();
+
+      const goldiRealY = goldi.y + goldi.jumpOffset;
+      const dx = goldi.x - item.x;
+      const dy = goldiRealY - item.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (dist < (goldi.width / 2 + item.width / 2 - 5)) {
+        handleItemCollect(item);
+        items.splice(i, 1);
+        continue;
+      }
+
+      if (item.y > 800) {
+        items.splice(i, 1);
+      }
+    }
+
+    for (let o = obstacles.length - 1; o >= 0; o--) {
+      const obstacle = obstacles[o];
+      obstacle.update();
+
+      const goldiRealY = goldi.y + goldi.jumpOffset;
+      const dx = goldi.x - obstacle.x;
+      const dy = goldiRealY - obstacle.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (goldi.invincible <= 0 && dist < (goldi.width / 2.6 + obstacle.width / 2.6)) {
+        handleDamage();
+        obstacles.splice(o, 1);
+        continue;
+      }
+
+      if (obstacle.y > 820 || obstacle.x < -100 || obstacle.x > 1124) {
+        obstacles.splice(o, 1);
+      }
+    }
+
+    for (let p = particles.length - 1; p >= 0; p--) {
+      particles[p].update();
+      if (particles[p].life <= 0) {
+        particles.splice(p, 1);
+      }
+    }
+  }
+
+  // ==========================================
+  // FEEDBACKS & EVENTS
+  // ==========================================
+  function handleItemCollect(item) {
+    if (item.type === 'page') {
+      score += 10;
+      progress += 1;
+      AudioController.playCollect();
+      spawnCollectBurst(item.x, item.y, '#fff');
+    } 
+    else if (item.type === 'goldPage') {
+      score += 50;
+      progress += 5;
+      AudioController.playGoldCollect();
+      spawnCollectBurst(item.x, item.y, '#ffd54f');
+    }
+    else if (item.type === 'finalChapter') {
+      gameState = 'VICTORY';
+      AudioController.playVictory();
+      showVictoryScreen();
+    }
+    else {
+      AudioController.playPowerup();
+      spawnCollectBurst(item.x, item.y, '#81c784');
+      
+      switch (item.type) {
+        case 'bookmark':
+          activePowerups.bookmark = 480; 
+          break;
+        case 'goldDust':
+          activePowerups.goldDust = 600; 
+          break;
+        case 'lamp':
+          activePowerups.lamp = 480; 
+          break;
+        case 'tea':
+          if (hearts < 5) {
+            hearts++;
+          }
+          break;
+      }
+    }
+
+    if (progress > 100) progress = 100;
+
+    // Checken ob eine neue 10%-Hürde übersprungen wurde für die Tempowarnung!
+    const currentStep = Math.min(9, Math.floor(progress / 10));
+    if (currentStep > lastSpeedStep && currentStep > 0) {
+      speedAlertTimer = 110; // ca. 2 Sekunden weich pulsierende Tempo-Erhöhungswarnung
+      lastSpeedStep = currentStep;
+      AudioController.playPowerup();
+    }
+  }
+
+  function handleDamage() {
+    hearts--;
+    goldi.invincible = 60; 
+    AudioController.playHit();
+    
+    canvas.style.transform = 'translate(5px, 5px)';
+    setTimeout(() => canvas.style.transform = 'translate(-5px, -5px)', 50);
+    setTimeout(() => canvas.style.transform = 'translate(0px, 0px)', 100);
+
+    spawnCollectBurst(goldi.x, goldi.y + goldi.jumpOffset, '#ef5350');
+
+    if (hearts <= 0) {
+      // Splat-Animation einleiten: Geist stürzt ab
+      gameState = 'DYING';
+      goldi.deathFallSpeed = -2; // Mini-Hüpfer vor dem Absturz
+      goldi.targetY = 640;
+    }
+  }
+
+  // ==========================================
+  // RENDERING ENGINE
+  // ==========================================
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.drawImage(bgCanvas, 0, 0);
+
+    // Kerzenscheine flimmern lassen
+    candles.forEach(c => {
+      const flickerSize = Math.sin(frameCount * 0.12 + c.x) * 2 + 5;
+      
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      let grad = ctx.createRadialGradient(c.x, c.y, 1, c.x, c.y, flickerSize * 3);
+      grad.addColorStop(0, 'rgba(255, 143, 0, 0.85)');
+      grad.addColorStop(1, 'rgba(255, 143, 0, 0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, flickerSize * 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#fff9c4';
+      ctx.beginPath();
+      ctx.ellipse(c.x, c.y - 1, 2.5, flickerSize, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    items.forEach(item => item.draw());
+    obstacles.forEach(obs => obs.draw());
+
+    // Goldi zeichnen (Mit K.O.-Klatschen Weichenstellung!)
+    ctx.save();
+    
+    if (gameState === 'GAMEOVER' || (gameState === 'DYING' && goldi.y >= 630)) {
+      // K.O. Status auf dem Boden (Referenzbild-Anpassung!)
+      const deadImg = goldi.direction === 1 ? sprites.goldiDeadRight : sprites.goldiDeadLeft;
+      ctx.drawImage(
+        deadImg, 
+        goldi.x - 55, 
+        645, // Liegt komplett flach auf dem Holzdielenboden
+        110, 
+        68
+      );
+    } else {
+      const bobbing = gameState === 'DYING' ? 0 : Math.sin(frameCount * 0.08) * 3;
+      const goldiRealY = goldi.y + goldi.jumpOffset + bobbing;
+      
+      if (goldi.invincible > 0 && Math.floor(frameCount / 4) % 2 === 0) {
+        ctx.globalAlpha = 0.35;
+      }
+
+      let goldiImg = goldi.direction === 1 ? sprites.goldiIdleRight : sprites.goldiIdleLeft;
+      if (goldi.isJumping) {
+        goldiImg = goldi.direction === 1 ? sprites.goldiJumpRight : sprites.goldiJumpLeft;
+      }
+
+      ctx.drawImage(
+        goldiImg, 
+        goldi.x - goldi.width / 2, 
+        goldiRealY - goldi.height / 2, 
+        goldi.width, 
+        goldi.height
+      );
+    }
+    ctx.restore();
+
+    particles.forEach(p => p.draw(ctx));
+
+    // Magische Cozy-Beleuchtung (Verstärkter Amber-Glow)
+    const goldiYForLight = (gameState === 'GAMEOVER' || gameState === 'DYING') ? 665 : (goldi.y + goldi.jumpOffset);
+    drawWarmCozyLighting(goldiYForLight);
+
+    if (windActive > 0 && gameState === 'PLAYING') {
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 143, 0, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffb300';
+      ctx.font = '10px "Press Start 2P"';
+      ctx.textAlign = 'center';
+      if (Math.floor(frameCount / 15) % 2 === 0) {
+        ctx.fillText("🌪️ PAPIERSTURM IN DER BIBLIOTHEK! 🌪️", canvas.width / 2, 200);
+      }
+      ctx.restore();
+    }
+
+    // BANNER: Tempo erhöht (10%, 20%...)
+    if (speedAlertTimer > 0 && gameState === 'PLAYING') {
+      ctx.save();
+      ctx.fillStyle = 'rgba(239, 83, 80, 0.15)'; // Leichtes bedrohliches Rotband
+      ctx.fillRect(0, 180, canvas.width, 60);
+      ctx.strokeStyle = '#ef5350';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(0, 180, canvas.width, 60);
+      
+      ctx.fillStyle = '#ffd54f';
+      ctx.font = '11px "Press Start 2P"';
+      ctx.textAlign = 'center';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = '#d84315';
+      ctx.fillText(`⚡ TEMPO ERHÖHT! Stufe ${lastSpeedStep}/9 ⚡`, canvas.width / 2, 215);
+      ctx.restore();
+    }
+
+    drawHUD();
+  }
+
+  function drawWarmCozyLighting(goldiY) {
+    const lightCanvas = document.createElement('canvas');
+    lightCanvas.width = canvas.width;
+    lightCanvas.height = canvas.height;
+    const lCtx = lightCanvas.getContext('2d');
+
+    lCtx.fillStyle = 'rgba(10, 5, 3, 0.7)';
+    lCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+    lCtx.globalCompositeOperation = 'destination-out';
+
+    const lampRadius = activePowerups.lamp > 0 ? 300 : 135;
+    let radialGrad = lCtx.createRadialGradient(
+      goldi.x, goldiY, 5, 
+      goldi.x, goldiY, lampRadius
+    );
+    radialGrad.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+    radialGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    lCtx.fillStyle = radialGrad;
+    lCtx.beginPath();
+    lCtx.arc(goldi.x, goldiY, lampRadius, 0, Math.PI * 2);
+    lCtx.fill();
+
+    candles.forEach(c => {
+      let candGrad = lCtx.createRadialGradient(c.x, c.y, 2, c.x, c.y, 50);
+      candGrad.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+      candGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      lCtx.fillStyle = candGrad;
+      lCtx.beginPath();
+      lCtx.arc(c.x, c.y, 50, 0, Math.PI * 2);
+      lCtx.fill();
+    });
+
+    ctx.drawImage(lightCanvas, 0, 0);
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    
+    let goldiWarmGrad = ctx.createRadialGradient(
+      goldi.x, goldiY, 10, 
+      goldi.x, goldiY, lampRadius
+    );
+    goldiWarmGrad.addColorStop(0, 'rgba(255, 143, 0, 0.22)');
+    goldiWarmGrad.addColorStop(1, 'rgba(255, 143, 0, 0)');
+    ctx.fillStyle = goldiWarmGrad;
+    ctx.beginPath();
+    ctx.arc(goldi.x, goldiY, lampRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    candles.forEach(c => {
+      let candWarm = ctx.createRadialGradient(c.x, c.y, 2, c.x, c.y, 60);
+      candWarm.addColorStop(0, 'rgba(255, 111, 0, 0.35)');
+      candWarm.addColorStop(1, 'rgba(255, 111, 0, 0)');
+      ctx.fillStyle = candWarm;
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, 60, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.restore();
+  }
+
+  function drawHUD() {
+    ctx.save();
+    
+    ctx.fillStyle = 'rgba(23, 11, 7, 0.9)';
+    ctx.strokeStyle = '#4e2b1f';
+    ctx.lineWidth = 4;
+    ctx.fillRect(10, 10, 1004, 60);
+    ctx.strokeRect(10, 10, 1004, 60);
+
+    // 1. LEBEN/HERZEN
+    ctx.font = '10px "Press Start 2P"';
+    ctx.fillStyle = '#ffecb3';
+    ctx.fillText("HERZEN:", 30, 45);
+    
+    for (let h = 0; h < 5; h++) {
+      if (h < hearts) {
+        ctx.fillStyle = '#ef5350'; 
+      } else if (h < maxHearts) {
+        ctx.fillStyle = 'rgba(255,255,255,0.12)'; 
+      } else {
+        break;
+      }
+      ctx.fillText("💖", 120 + h * 32, 45);
+    }
+
+    // 2. RETTUNGS-PROGRESS & LEVEL STUFE
+    const currentStep = Math.min(9, Math.floor(progress / 10));
+    ctx.fillStyle = '#ffecb3';
+    ctx.fillText(`FORT-SCHRITT (LV ${currentStep}):`, 390, 45);
+    
+    ctx.fillStyle = '#2b120a';
+    ctx.fillRect(630, 31, 160, 20);
+    
+    const progWidth = (progress / 100) * 160;
+    const progressGrad = ctx.createLinearGradient(630, 0, 790, 0);
+    progressGrad.addColorStop(0, '#e65100');
+    progressGrad.addColorStop(1, '#ffb300');
+    ctx.fillStyle = progressGrad;
+    ctx.fillRect(630, 31, progWidth, 20);
+    
+    ctx.strokeStyle = '#ffd54f';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(630, 31, 160, 20);
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '8px "Press Start 2P"';
+    ctx.textAlign = 'center';
+    ctx.fillText(`${progress}%`, 710, 45);
+
+    // 3. SCORE
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#ffb300';
+    ctx.font = '10px "Press Start 2P"';
+    ctx.fillText(`PUNKTE: ${score}`, 990, 45);
+
+    // 4. POWER-UP ZEITANZEIGE
+    let powerupOffset = 0;
+    ctx.textAlign = 'left';
+    ctx.font = '8px "Press Start 2P"';
+
+    if (activePowerups.bookmark > 0) {
+      drawPowerupIndicator("⚡ Tempo", activePowerups.bookmark, 480, powerupOffset, '#ff5722');
+      powerupOffset += 120;
+    }
+    if (activePowerups.goldDust > 0) {
+      drawPowerupIndicator("🧲 Magnet", activePowerups.goldDust, 600, powerupOffset, '#ffca28');
+      powerupOffset += 120;
+    }
+    if (activePowerups.lamp > 0) {
+      drawPowerupIndicator("💡 Zeitlupe", activePowerups.lamp, 480, powerupOffset, '#26a69a');
+      powerupOffset += 120;
+    }
+
+    ctx.restore();
+  }
+
+  function drawPowerupIndicator(name, current, max, offset, color) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,0,0,0.65)';
+    ctx.fillRect(20 + offset, 720, 110, 30);
+    ctx.strokeStyle = color;
+    ctx.strokeRect(20 + offset, 720, 110, 30);
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '5px "Press Start 2P"';
+    ctx.fillText(name, 25 + offset, 731);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.fillRect(25 + offset, 738, 100, 6);
+    ctx.fillStyle = color;
+    ctx.fillRect(25 + offset, 738, (current / max) * 100, 6);
+    ctx.restore();
+  }
+
+  // ==========================================
+  // CODEX MINI-BILDER RENDERN
+  // ==========================================
+  function renderLexiconGifs() {
+    const drawToUiCanvas = (canvasId, sprite, w, h) => {
+      const uCanv = document.getElementById(canvasId);
+      if (!uCanv) return;
+      const uCtx = uCanv.getContext('2d');
+      uCtx.imageSmoothingEnabled = false;
+      uCtx.clearRect(0, 0, uCanv.width, uCanv.height);
+      const renderSizeW = w * 0.95;
+      const renderSizeH = h * 0.95;
+      uCtx.drawImage(
+        sprite, 
+        (uCanv.width - renderSizeW) / 2, 
+        (uCanv.height - renderSizeH) / 2, 
+        renderSizeW, 
+        renderSizeH
+      );
+    };
+
+    // Schätze links
+    drawToUiCanvas('page-codex-canvas', sprites.page, 32, 32);
+    drawToUiCanvas('goldpage-codex-canvas', sprites.goldPage, 32, 32);
+    drawToUiCanvas('bookmark-codex-canvas', sprites.bookmark, 28, 30);
+    drawToUiCanvas('magnet-codex-canvas', sprites.goldDust, 28, 30);
+    drawToUiCanvas('tea-codex-canvas', sprites.tea, 32, 32);
+
+    // Gefahren rechts
+    drawToUiCanvas('moth-lex-canvas', sprites.moth, 44, 30);
+    drawToUiCanvas('inkwell-lex-canvas', sprites.inkwell, 38, 38);
+    drawToUiCanvas('web-lex-canvas', sprites.web, 48, 48);
+
+    // Flatter-Buch Animation
+    const ebCanv = document.getElementById('evilbook-lex-canvas');
+    if (ebCanv) {
+      const ebCtx = ebCanv.getContext('2d');
+      ebCtx.imageSmoothingEnabled = false;
+      
+      const drawEvilBookLex = () => {
+        if (gameState !== 'DANGER_SCREEN') return;
+        ebCtx.clearRect(0, 0, ebCanv.width, ebCanv.height);
+        ebCtx.save();
+        ebCtx.shadowBlur = 8;
+        ebCtx.shadowColor = '#d84315';
+        
+        ebCtx.fillStyle = '#311b92';
+        ebCtx.fillRect(4, 12, 40, 24);
+        ebCtx.fillStyle = '#ef5350';
+        ebCtx.fillRect(12, 21, 4, 4);
+        ebCtx.fillRect(30, 21, 4, 4);
+        
+        ebCtx.fillStyle = '#5c3820';
+        const flattern = Math.sin(Date.now() * 0.01) > 0;
+        if (flattern) {
+          ebCtx.fillRect(0, 6, 6, 12);
+          ebCtx.fillRect(42, 6, 6, 12);
+        } else {
+          ebCtx.fillRect(0, 24, 6, 12);
+          ebCtx.fillRect(42, 24, 6, 12);
+        }
+        ebCtx.restore();
+        requestAnimationFrame(drawEvilBookLex);
+      };
+      drawEvilBookLex();
+    }
+  }
+
+  // ==========================================
+  // GAME LOOP CONTROLLER
+  // ==========================================
+  function gameLoop() {
+    if (gameState === 'PLAYING' || gameState === 'DYING') {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+  }
+
+  // ==========================================
+  // UI NAVIGATION & SCREENS
+  // ==========================================
+  
+  // Startbildschirm -> Codex
+  document.getElementById('to-danger-btn').addEventListener('click', () => {
+    AudioController.init();
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('danger-screen').classList.remove('hidden');
+    gameState = 'DANGER_SCREEN';
+    renderLexiconGifs(); 
+  });
+
+  // Codex -> Spiel Start
+  document.getElementById('start-game-btn').addEventListener('click', () => {
+    document.getElementById('danger-screen').classList.add('hidden');
+    startGame();
+  });
+
+  document.getElementById('restart-btn').addEventListener('click', () => {
+    document.getElementById('gameover-screen').classList.add('hidden');
+    startGame();
+  });
+
+  document.getElementById('victory-restart-btn').addEventListener('click', () => {
+    document.getElementById('victory-screen').classList.add('hidden');
+    startGame();
+  });
+
+  function startGame() {
+    score = 0;
+    progress = 0;
+    hearts = 3;
+    maxHearts = 3;
+    finalChapterSpawned = false;
+    items = [];
+    obstacles = [];
+    particles = [];
+    windActive = 0;
+    windTimer = 400;
+    speedAlertTimer = 0;
+    lastSpeedStep = 0;
+
+    activePowerups = { bookmark: 0, goldDust: 0, lamp: 0 };
+    goldi.x = 512;
+    goldi.y = 550;
+    goldi.targetX = 512;
+    goldi.targetY = 550;
+    goldi.jumpOffset = 0;
+    goldi.jumpVelocity = 0;
+    goldi.isJumping = false;
+    goldi.invincible = 0;
+    goldi.deathFallSpeed = 0;
+
+    gameState = 'PLAYING';
+    gameLoop();
+  }
+
+  function showGameOverScreen() {
+    document.getElementById('gameover-score').innerText = `Erreichte Punkte: ${score}`;
+    document.getElementById('gameover-screen').classList.remove('hidden');
+  }
+
+  function showVictoryScreen() {
+    document.getElementById('victory-score').innerText = `Deine finale Punktzahl: ${score}`;
+    document.getElementById('victory-screen').classList.remove('hidden');
+  }
+
+  window.onload = function() {
+    initSprites();
+    renderCozyLibraryBackground();
+    draw();
+  };
+</script>
+
+</body>
+</html>
