@@ -612,7 +612,7 @@ transition: transform 0.25s ease;
   display: flex;
   align-items: center;
   gap: 18px;
-  margin-bottom: 22px;
+  margin-bottom: 30px;
 }
 
 .tour-number {
@@ -634,12 +634,11 @@ transition: transform 0.25s ease;
 
 .tour-title {
   color: #8b6330;
-  font-size: .9rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: .12em;
-}
-.tour-label::before{
+  letter-spacing: .16em;
+}.tour-label::before{
   content:"";
   width:42px;
   height:42px;
@@ -654,8 +653,10 @@ transition: transform 0.25s ease;
 }
 
 .tour-item h3 {
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  margin-bottom: 16px;
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  line-height: 1.15;
+  margin: 10px 0 20px;
+  font-weight: 700;
 }
 
 .tour-item p {
@@ -1230,6 +1231,24 @@ width: 100%;
   gap: 28px;
   flex-wrap: wrap;
 }
+.tour-caption{
+    margin-top:28px;
+    max-width:900px;
+}
+
+.tour-caption h3{
+    margin:0 0 10px;
+    font-size:1.4rem;
+    font-weight:700;
+    color:#2b2b2b;
+}
+
+.tour-caption p{
+    margin:0;
+    font-size:1.05rem;
+    line-height:1.8;
+    color:var(--muted);
+}
   </style>
 </head>
 
@@ -1337,10 +1356,7 @@ width: 100%;
 
     <h3>Der erste Eindruck der Markenwelt</h3>
 
-    <p>
-      Die Startseite begrüßt Besucher:innen mit einer ruhigen, warmen Atmosphäre und stellt die wichtigsten Angebote direkt im Hero-Bereich vor.
-    </p>
-
+ 
     <div class="hero-browser tour-browser">
       <div class="browser-top">
         <div class="browser-dots">
@@ -1348,15 +1364,18 @@ width: 100%;
           <span></span>
           <span></span>
         </div>
-
+ <p>
+      Die Startseite begrüßt Besucher:innen mit einer ruhigen, warmen Atmosphäre und stellt die wichtigsten Angebote direkt im Hero-Bereich vor.
+    </p>
         <div class="browser-address">
           https://kapitelgold.de
         </div>
       </div>
 
-      <img class="website-zoom-image" src="assets/kg-tour-home.png" alt="Startseite Kapitelgold">
-    </div>
-  </article>
+      <img class="website-zoom-image" src="assets/kg-tour-1.png" alt="Startseite Kapitelgold">
+</div>
+
+</article>
   <article class="tour-item tour-right reveal-on-scroll" id="tour-events">
     <div class="tour-label">
       <span class="tour-number">02</span>
@@ -1689,18 +1708,21 @@ https://kapitelgold.de
 
 </div>
 
-<img src="assets/kg-tour-1.png"
-alt="Startseite Kapitelgold">
+<img
+  class="website-zoom-image"
+  src="assets/kg-tour-1.png"
+  alt="Startseite Kapitelgold"
+>
 
 </div>
 
-<div class="tour-text">
+<div class="tour-caption">
 
-<h3>Die Startseite</h3>
+  <h3>Die Startseite</h3>
 
-<p>
-Die Website begrüßt Besucher:innen mit einer ruhigen, warmen Atmosphäre und stellt die wichtigsten Angebote direkt im Hero-Bereich vor. Ziel war es, Orientierung zu schaffen und gleichzeitig die Persönlichkeit der Marke sichtbar zu machen.
-</p>
+  <p>
+    Die Website begrüßt Besucher:innen mit einer ruhigen, warmen Atmosphäre und stellt die wichtigsten Angebote direkt im Hero-Bereich vor. Ziel war es, Orientierung zu schaffen und gleichzeitig die Persönlichkeit der Marke sichtbar zu machen.
+  </p>
 
 </div>
 
